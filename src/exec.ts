@@ -83,6 +83,11 @@ export async function runExec(opts: ExecOptions): Promise<number> {
   }
   if (opts.json) {
     emitJson({ type: "result", text: finalText, exitCode });
+  } else {
+    const { totalInputTokens: input, totalOutputTokens: output } = runtime.agent;
+    if (input || output) {
+      process.stderr.write(`[cycode] tokens: ${input} in / ${output} out\n`);
+    }
   }
   return exitCode;
 }

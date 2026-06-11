@@ -5,8 +5,7 @@ import { startGui } from "./gui/server.js";
 import { startRepl, type ArbiterRef } from "./tui/app.js";
 import { SessionStore } from "./session/store.js";
 import { PERMISSION_MODES, type PermissionMode } from "./permissions/permissions.js";
-
-const VERSION = "0.1.0";
+import { VERSION } from "./version.js";
 
 const USAGE = `cycode — an open-source terminal coding agent for AI research
 

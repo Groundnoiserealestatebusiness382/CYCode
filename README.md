@@ -32,7 +32,7 @@ General coding agents stop at code. Research is code **plus** literature, experi
 - 🧪 **Experiments** — `exp_run` launches training scripts detached in the background; `exp_status` tails logs and extracts metrics by regex; `/watch-run` reports trends and flags divergence (NaN losses, OOM, frozen output).
 - 📓 **Notebooks** — `notebook_read` / `notebook_edit` operate on `.ipynb` cells directly, preserving nbformat.
 - 📄 **LaTeX** — `latex_build` compiles via latexmk/pdflatex and returns structured `file:line` errors. `/paper-draft` writes grounded in your actual results.
-- 💻 **Code** — the full coding toolkit: `read`, `write`, `edit`, `glob`, `grep`, `bash`, `web_fetch`, with permission gating on everything and post-edit diagnostics fed back to the model.
+- 💻 **Code** — the full coding toolkit: `read`, `write`, `edit`, `glob`, `grep`, `bash`, `web_fetch` (plus optional `web_search`), with permission gating on everything and post-edit diagnostics fed back to the model.
 - 🔁 **Loops** — `cycode exec "task" --json` emits machine-readable events and meaningful exit codes, designed to be driven by recurring agent loops, cron, and CI.
 
 ## Heritage
@@ -132,7 +132,7 @@ Allow/deny rules use Claude Code-style patterns, and "always allow" answers pers
 }
 ```
 
-Deny rules win over everything — including read-only tools and `bypass` mode. Full grammar in [docs/configuration.md](docs/configuration.md).
+Deny rules win over everything — including read-only tools and `bypass` mode. For deterministic guardrails beyond rules, **hooks** run shell commands before/after tool calls and can block them (exit 2) — e.g. forbid force-pushes no matter what the model decides. Full grammar and the hook contract in [docs/configuration.md](docs/configuration.md).
 
 ## Skills
 
@@ -173,13 +173,14 @@ CYCode doesn't try to beat the big harnesses at general software engineering —
 ## Roadmap
 
 - [x] Standalone binaries for macOS / Linux / Windows (GitHub Releases)
+- [x] Hooks (pre/post tool-use shell guardrails)
+- [x] Parallel execution of read-only tool batches (incl. `explore` fan-out)
+- [x] Runtime model switching (`/model`) and session token tracking
 - [ ] npm package release (`npm i -g cycode`)
 - [ ] Native desktop app (Tauri) wrapping the GUI
 - [ ] wandb / tensorboard native integration for `exp_status`
 - [ ] LSP-based diagnostics (currently command-based)
 - [ ] OS-level bash sandboxing (Seatbelt / Landlock, Codex-style)
-- [ ] Hooks (pre/post tool-use shell commands)
-- [ ] Parallel subagent fan-out for large literature surveys
 
 Have an idea? [Open an issue](https://github.com/ChaoYue0307/CYCode/issues/new/choose).
 

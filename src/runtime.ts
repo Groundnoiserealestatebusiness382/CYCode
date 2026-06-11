@@ -2,6 +2,7 @@ import { loadConfig, saveProjectPermission, type CycodeConfig } from "./config.j
 import { resolveModel, defaultModelSpec, smallModelSpec } from "./provider/registry.js";
 import { getContextWindow } from "./provider/models.js";
 import { coreTools } from "./tools/core/index.js";
+import { webSearchTool, webSearchAvailable } from "./tools/core/web_search.js";
 import { researchTools } from "./tools/research/index.js";
 import type { CycodeTool } from "./tools/types.js";
 import { Agent } from "./agent/loop.js";
@@ -35,6 +36,8 @@ export interface Runtime {
   modelSpec: string;
   config: CycodeConfig;
   session?: SessionStore;
+  /** Hot-swap the model; throws on an invalid spec. Updates `modelSpec`. */
+  switchModel: (spec: string) => void;
   close: () => Promise<void>;
 }
 
@@ -51,6 +54,7 @@ export async function createRuntime(opts: RuntimeOptions): Promise<Runtime> {
   const mcp = await connectMcpServers(config, notice);
 
   const localTools: CycodeTool[] = [...coreTools, ...researchTools];
+  if (webSearchAvailable()) localTools.push(webSearchTool);
   const exploreTool = createExploreTool({
     cwd: opts.cwd,
     config,
@@ -96,5 +100,27 @@ export async function createRuntime(opts: RuntimeOptions): Promise<Runtime> {
     onAlwaysAllow: (rule) => saveProjectPermission(opts.cwd, rule),
   });
 
-  return { agent, bus, skills, modelSpec, config, session, close: mcp.close };
+  const runtime: Runtime = {
+    agent,
+    bus,
+    skills,
+    modelSpec,
+    config,
+    session,
+    switchModel: (spec: string) => {
+      const nextModel = resolveModel(spec, config);
+      const nextWindow = getContextWindow(spec, config);
+      agent.setModel(nextModel, nextWindow);
+      agent.systemPrompt = buildSystemPrompt({
+        cwd: opts.cwd,
+        modelSpec: spec,
+        mode: agent.mode,
+        contextFiles: loadContextFiles(opts.cwd),
+        skills,
+      });
+      runtime.modelSpec = spec;
+    },
+    close: mcp.close,
+  };
+  return runtime;
 }

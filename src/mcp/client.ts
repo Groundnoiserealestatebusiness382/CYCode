@@ -4,6 +4,7 @@ import { StreamableHTTPClientTransport } from "@modelcontextprotocol/sdk/client/
 import { jsonSchema } from "ai";
 import type { CycodeConfig, McpServerConfig } from "../config.js";
 import type { CycodeTool } from "../tools/types.js";
+import { VERSION } from "../version.js";
 
 export interface McpConnection {
   tools: CycodeTool[];
@@ -14,7 +15,7 @@ async function connectServer(
   name: string,
   server: McpServerConfig,
 ): Promise<{ client: Client; tools: CycodeTool[] }> {
-  const client = new Client({ name: "cycode", version: "0.1.0" });
+  const client = new Client({ name: "cycode", version: VERSION });
   if (server.url) {
     await client.connect(new StreamableHTTPClientTransport(new URL(server.url)));
   } else if (server.command) {

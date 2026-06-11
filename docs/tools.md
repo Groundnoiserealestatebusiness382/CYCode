@@ -15,6 +15,7 @@ apply); all others require approval via mode, allow-rule, or interactive prompt.
 | `grep` | ✅ | Regex search returning `file:line:text` (ripgrep when available, JS fallback) | `pattern`, `path?`, `glob?`, `ignore_case?` |
 | `bash` | ❌ | Run a shell command from the project dir; combined output, middle-truncated at 30 KB | `command`, `timeout_ms?` (default 120s, max 600s) |
 | `web_fetch` | ✅ | Fetch a URL; HTML converted to text, 20 KB cap | `url` |
+| `web_search` | ✅ | Web search via Tavily; registered only when `TAVILY_API_KEY` is set | `query`, `max_results?` |
 | `todo_write` | ✅ | Replace the session todo list (rendered live in the TUI/GUI) | `todos[]` |
 | `explore` | ✅ | Spawn a read-only subagent for broad investigation; only its final report returns | `task` |
 

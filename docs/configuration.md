@@ -22,6 +22,12 @@ concatenate:
   // run after write/edit/notebook_edit; non-zero output is fed back to the model
   "diagnostics": { "command": "npm run typecheck", "timeoutMs": 60000 },
 
+  // shell hooks around tool execution (see "Hooks" below)
+  "hooks": {
+    "preToolUse":  [{ "match": "bash(git push*)", "command": "./scripts/guard-push.sh" }],
+    "postToolUse": [{ "match": "edit", "command": "./scripts/style-check.sh" }]
+  },
+
   // MCP servers: stdio (command) or streamable HTTP (url)
   "mcpServers": {
     "github": { "command": "gh-mcp-server", "args": [], "env": {} },
@@ -47,6 +53,7 @@ concatenate:
 | `GOOGLE_GENERATIVE_AI_API_KEY` | `google/*` models |
 | `OPENROUTER_API_KEY` | `openrouter/*` models |
 | `SEMANTIC_SCHOLAR_API_KEY` | higher rate limits for `semantic_scholar` (optional) |
+| `TAVILY_API_KEY` | enables the `web_search` tool (absent → tool not registered) |
 | `CYCODE_HOME` | relocate config/sessions/papers (default `~/.cycode`) |
 
 ## Permission modes
@@ -72,6 +79,30 @@ toolname(prefix *)    prefix wildcard (the * must be last)
 The argument is the tool's permission key — the command for `bash`, the file path for
 `write`/`edit` (see [tools.md](tools.md)). Answering **a**lways in a permission prompt
 appends the exact key to the project config's allow list.
+
+## Hooks
+
+Hooks are shell commands that run around tool execution — deterministic guardrails
+the model can't talk its way past. `match` uses the same pattern grammar as
+permission rules, against the same per-call keys.
+
+- **`preToolUse`** runs before the tool. **Exit code 2 blocks the call**; the hook's
+  output is returned to the model as the error. Any other non-zero exit is a
+  warning notice and the call proceeds.
+- **`postToolUse`** runs after a successful call. **Exit code 2 appends the hook's
+  output to the tool result** as feedback the model must address. Other non-zero
+  exits are warnings.
+
+Hooks receive the call as environment variables: `CYCODE_TOOL_NAME`,
+`CYCODE_TOOL_KEY` (e.g. `bash(git push)`), `CYCODE_TOOL_INPUT` (JSON), and — for
+postToolUse — `CYCODE_TOOL_OUTPUT` (first 8 KB). Default timeout 30 s
+(`timeoutMs` to change). User and project hook lists concatenate.
+
+```jsonc
+// block force-pushes no matter what the model decides
+{ "match": "bash(git push*)",
+  "command": "echo \\"$CYCODE_TOOL_INPUT\\" | grep -q -- --force && { echo 'no force pushes' >&2; exit 2; } || exit 0" }
+```
 
 ## Context files
 

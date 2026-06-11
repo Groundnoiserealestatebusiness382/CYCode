@@ -6,6 +6,32 @@ All notable changes to CYCode are documented here. The format follows
 
 ## [Unreleased]
 
+## [0.2.0] - 2026-06-11
+
+### Added
+- **Hooks**: `preToolUse` / `postToolUse` shell hooks in config — deterministic
+  guardrails around tool execution. Exit code 2 blocks a call (pre) or feeds the
+  hook's output back to the model (post); hooks receive the call via
+  `CYCODE_TOOL_*` environment variables.
+- **Runtime model switching**: `/model <spec>` now switches mid-session in the
+  REPL and the GUI (no restart).
+- **Parallel tool execution**: batches consisting only of read-only tool calls
+  (multiple greps, parallel `explore` subagents) run concurrently.
+- **Session token tracking**: cumulative input/output tokens shown in the TUI
+  status line, the GUI header, and exec's stderr summary.
+- **`web_search` tool** (Tavily), registered only when `TAVILY_API_KEY` is set.
+
+### Changed
+- New brand identity: hexagonal-C mark with a terminal cursor, applied across the
+  logo, app icon, README figures, and the GUI (favicon + header).
+- Banner, terminal, and architecture figures redesigned: tighter typography,
+  window shadow and syntax-colored strings in the session mockup, rounded
+  connector elbows and a stricter grid in the architecture diagram.
+- `assets/logo.svg` (standalone mark) and `assets/icon.svg` (app icon, ready for
+  the planned desktop app) added.
+- Version is now a single constant (`src/version.ts`) shared by the CLI and the
+  MCP client identity.
+
 ## [0.1.0] - 2026-06-11
 
 Initial release.
@@ -35,5 +61,6 @@ Initial release.
 - Post-edit diagnostics command with model feedback.
 - 51 vitest tests including mock-model agent-loop integration.
 
-[Unreleased]: https://github.com/ChaoYue0307/CYCode/compare/v0.1.0...HEAD
+[Unreleased]: https://github.com/ChaoYue0307/CYCode/compare/v0.2.0...HEAD
+[0.2.0]: https://github.com/ChaoYue0307/CYCode/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/ChaoYue0307/CYCode/releases/tag/v0.1.0

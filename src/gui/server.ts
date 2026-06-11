@@ -151,6 +151,10 @@ export async function startGui(opts: GuiOptions): Promise<void> {
     skills: runtime.skills.map((s) => ({ name: s.name, description: s.description })),
     todos: runtime.agent.todos,
     sessionId: runtime.agent.sessionMeta?.id ?? null,
+    usage: {
+      inputTokens: runtime.agent.totalInputTokens,
+      outputTokens: runtime.agent.totalOutputTokens,
+    },
   });
 
   const server = http.createServer(async (req, res) => {
@@ -210,6 +214,17 @@ export async function startGui(opts: GuiOptions): Promise<void> {
       } else if (req.method === "POST" && url.pathname === "/api/abort") {
         runtime.agent.abort();
         json(res, 200, { ok: true });
+      } else if (req.method === "POST" && url.pathname === "/api/model") {
+        const { spec } = await readBody(req);
+        if (runtime.agent.busy) return json(res, 409, { error: "agent is busy" });
+        try {
+          runtime.switchModel(String(spec));
+          broadcast({ type: "notice", message: `Model switched to ${spec}` });
+          broadcast(state());
+          json(res, 200, { ok: true });
+        } catch (err) {
+          json(res, 400, { error: err instanceof Error ? err.message : String(err) });
+        }
       } else if (req.method === "POST" && url.pathname === "/api/mode") {
         const { mode } = await readBody(req);
         if (!PERMISSION_MODES.includes(mode)) return json(res, 400, { error: "bad mode" });

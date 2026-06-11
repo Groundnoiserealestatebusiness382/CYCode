@@ -9,7 +9,8 @@ import {
 } from "ai";
 import type { CycodeConfig } from "../config.js";
 import type { CycodeTool, ToolContext } from "../tools/types.js";
-import { describeCall } from "../tools/types.js";
+import { describeCall, permissionKeyFor } from "../tools/types.js";
+import { runHooks } from "./hooks.js";
 import {
   PermissionGate,
   type PermissionArbiter,
@@ -47,8 +48,12 @@ export class Agent {
   private readonly toolByName: Map<string, CycodeTool>;
   private readonly aiTools: ToolSet;
   private session?: SessionStore;
+  private model: LanguageModel;
+  private contextWindow: number;
   private lastPromptTokens: number | undefined;
   private abortController: AbortController | null = null;
+  totalInputTokens = 0;
+  totalOutputTokens = 0;
   busy = false;
 
   constructor(opts: AgentOptions) {
@@ -71,7 +76,15 @@ export class Agent {
       ]),
     );
     this.session = opts.session;
+    this.model = opts.model;
+    this.contextWindow = opts.contextWindow;
     if (this.session) this.messages = this.session.loadMessages();
+  }
+
+  /** Hot-swap the model mid-session (REPL /model, GUI). */
+  setModel(model: LanguageModel, contextWindow: number): void {
+    this.model = model;
+    this.contextWindow = contextWindow;
   }
 
   get sessionMeta(): SessionStore["meta"] | undefined {
@@ -145,7 +158,7 @@ export class Agent {
 
   async compactNow(): Promise<void> {
     const summary = await summarizeConversation(
-      this.opts.smallModel ?? this.opts.model,
+      this.opts.smallModel ?? this.model,
       this.messages,
     );
     this.messages = [
@@ -174,12 +187,12 @@ export class Agent {
     try {
       const maxSteps = this.opts.maxStepsPerTurn ?? 100;
       for (let step = 0; step < maxSteps; step++) {
-        if (shouldCompact(this.lastPromptTokens, this.opts.contextWindow)) {
+        if (shouldCompact(this.lastPromptTokens, this.contextWindow)) {
           await this.compactNow();
         }
 
         const result = streamText({
-          model: this.opts.model,
+          model: this.model,
           system: this.systemPrompt,
           messages: this.messages,
           tools: this.aiTools,
@@ -213,6 +226,8 @@ export class Agent {
             case "finish-step":
               this.lastPromptTokens =
                 (part.usage.inputTokens ?? 0) + (part.usage.outputTokens ?? 0);
+              this.totalInputTokens += part.usage.inputTokens ?? 0;
+              this.totalOutputTokens += part.usage.outputTokens ?? 0;
               break;
             case "abort":
               throw new Error("Turn aborted");
@@ -232,15 +247,32 @@ export class Agent {
 
         if (toolCalls.length === 0) break;
 
-        const resultParts: ToolResultPart[] = [];
-        for (const call of toolCalls) {
-          resultParts.push(await this.executeToolCall(call, ctx, signal));
+        // read-only batches (e.g. several greps, parallel explores) run concurrently;
+        // anything that mutates state executes strictly in order
+        const allReadOnly =
+          toolCalls.length > 1 &&
+          toolCalls.every((c) => this.toolByName.get(c.toolName)?.readOnly === true);
+        let resultParts: ToolResultPart[];
+        if (allReadOnly) {
+          resultParts = await Promise.all(
+            toolCalls.map((call) => this.executeToolCall(call, ctx, signal)),
+          );
+        } else {
+          resultParts = [];
+          for (const call of toolCalls) {
+            resultParts.push(await this.executeToolCall(call, ctx, signal));
+          }
         }
         this.pushMessage({ role: "tool", content: resultParts });
       }
 
-      const usage = { inputTokens: this.lastPromptTokens, outputTokens: undefined };
-      this.emit({ type: "turn-end", usage });
+      this.emit({
+        type: "turn-end",
+        usage: {
+          inputTokens: this.totalInputTokens,
+          outputTokens: this.totalOutputTokens,
+        },
+      });
       return finalText;
     } catch (err) {
       if (signal.aborted) {
@@ -291,6 +323,33 @@ export class Agent {
       };
     }
 
+    const key = permissionKeyFor(cycTool, call.input);
+    const pre = await runHooks(this.opts.config.hooks?.preToolUse, {
+      cwd: this.opts.cwd,
+      toolName: call.toolName,
+      key,
+      input: call.input,
+    });
+    for (const warning of pre.warnings) {
+      this.emit({ type: "notice", message: `preToolUse ${warning}` });
+    }
+    if (pre.signal !== undefined) {
+      this.emit({
+        type: "tool-denied",
+        callId: call.toolCallId,
+        toolName: call.toolName,
+        reason: `Blocked by preToolUse hook: ${pre.signal}`,
+      });
+      return {
+        type: "tool-result",
+        ...base,
+        output: {
+          type: "error-text",
+          value: `Blocked by preToolUse hook: ${pre.signal}`,
+        },
+      };
+    }
+
     const gateResult = await this.gate.check(cycTool, call.input);
     if (!gateResult.allowed) {
       this.emit({
@@ -307,7 +366,20 @@ export class Agent {
     }
 
     try {
-      const output = await cycTool.execute(call.input, ctx);
+      let output = await cycTool.execute(call.input, ctx);
+      const post = await runHooks(this.opts.config.hooks?.postToolUse, {
+        cwd: this.opts.cwd,
+        toolName: call.toolName,
+        key,
+        input: call.input,
+        output,
+      });
+      for (const warning of post.warnings) {
+        this.emit({ type: "notice", message: `postToolUse ${warning}` });
+      }
+      if (post.signal !== undefined) {
+        output += `\n\nHOOK FEEDBACK (address before proceeding):\n${post.signal}`;
+      }
       this.emit({
         type: "tool-end",
         callId: call.toolCallId,

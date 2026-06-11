@@ -241,7 +241,12 @@ async function loadSessions() {
 function onEvent(ev) {
   switch (ev.type) {
     case "state": {
-      $("meta").textContent = ev.cwd.split("/").pop() + " · " + ev.modelSpec;
+      let meta = ev.cwd.split("/").pop() + " · " + ev.modelSpec;
+      if (ev.usage && (ev.usage.inputTokens || ev.usage.outputTokens)) {
+        meta += " · " + (ev.usage.inputTokens / 1000).toFixed(1) + "k in / " +
+          (ev.usage.outputTokens / 1000).toFixed(1) + "k out";
+      }
+      $("meta").textContent = meta;
       const sel = $("mode");
       sel.innerHTML = ev.modes.map(m =>
         '<option' + (m === ev.mode ? " selected" : "") + ">" + m + "</option>").join("");
@@ -254,7 +259,7 @@ function onEvent(ev) {
     case "reset": chat.innerHTML = ""; streamEl = null; tools.clear(); renderTodos([]); break;
     case "user": add("user", esc(ev.text)); streamEl = null; break;
     case "turn-start": setBusy(true); break;
-    case "turn-end": setBusy(false); streamEl = null; loadSessions(); break;
+    case "turn-end": setBusy(false); streamEl = null; loadSessions(); fetch("/api/state").then(r => r.json()).then(onEvent); break;
     case "text-delta": {
       if (!streamEl) { streamEl = add("assistant", ""); streamEl.dataset.raw = ""; }
       streamEl.dataset.raw += ev.text;
@@ -322,6 +327,8 @@ function send() {
   if (!text) return;
   $("input").value = "";
   $("input").style.height = "auto";
+  const m = /^\\/model\\s+(\\S+)$/.exec(text);
+  if (m) { post("/api/model", { spec: m[1] }); return; }
   post("/api/message", { text });
 }
 $("send").onclick = send;

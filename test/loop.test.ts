@@ -45,23 +45,28 @@ function finalTextStream(text: string) {
   ]);
 }
 
+function scriptedModel(streams: any[]) {
+  // note: MockLanguageModelV3's array form is off by one (reads index 1 on the
+  // first call), so feed the scripted streams through our own counter instead
+  let call = 0;
+  return new MockLanguageModelV3({ doStream: async () => streams[call++] });
+}
+
 function makeAgent(opts: {
   cwd: string;
   streams: any[];
   tools?: any[];
   arbiter?: any;
   events?: AgentEvent[];
+  config?: any;
 }) {
   const bus = new EventBus();
   const events: AgentEvent[] = opts.events ?? [];
   bus.on((e) => events.push(e));
-  // note: MockLanguageModelV3's array form is off by one (reads index 1 on the
-  // first call), so feed the scripted streams through our own counter instead
-  let call = 0;
-  const model = new MockLanguageModelV3({ doStream: async () => opts.streams[call++] });
+  const model = scriptedModel(opts.streams);
   const agent = new Agent({
     cwd: opts.cwd,
-    config: {},
+    config: opts.config ?? {},
     model,
     systemPrompt: "You are a test agent.",
     mode: "default",
@@ -137,6 +142,117 @@ describe("Agent loop", () => {
     const toolResult = (agent.messages[2]!.content as any[])[0];
     expect(toolResult.output.type).toBe("error-text");
     expect(toolResult.output.value).toMatch(/not found/i);
+  });
+
+  it("accumulates session token usage across steps", async () => {
+    const cwd = makeTmpDir();
+    fs.writeFileSync(path.join(cwd, "hello.txt"), "hi");
+    const { agent, events } = makeAgent({
+      cwd,
+      streams: [
+        textAndToolCallStream("Reading.", "read", { file_path: "hello.txt" }),
+        finalTextStream("done"),
+      ],
+    });
+    await agent.runTurn("go");
+    const turnEnd = events.find((e) => e.type === "turn-end") as any;
+    // two steps × (10 in / 5 out) from the mock usage fixture
+    expect(turnEnd.usage.inputTokens).toBe(20);
+    expect(turnEnd.usage.outputTokens).toBe(10);
+    expect(agent.totalInputTokens).toBe(20);
+  });
+
+  it("executes read-only tool batches in parallel and pairs results correctly", async () => {
+    const cwd = makeTmpDir();
+    fs.writeFileSync(path.join(cwd, "a.txt"), "alpha-contents");
+    fs.writeFileSync(path.join(cwd, "b.txt"), "beta-contents");
+    const twoReads = streamOf([
+      {
+        type: "tool-call",
+        toolCallId: "call-a",
+        toolName: "read",
+        input: JSON.stringify({ file_path: "a.txt" }),
+      },
+      {
+        type: "tool-call",
+        toolCallId: "call-b",
+        toolName: "read",
+        input: JSON.stringify({ file_path: "b.txt" }),
+      },
+      { type: "finish", finishReason: "tool-calls", usage },
+    ]);
+    const { agent } = makeAgent({
+      cwd,
+      streams: [twoReads, finalTextStream("both read")],
+    });
+    await agent.runTurn("read both");
+    const toolMessage = agent.messages.find((m) => m.role === "tool")!;
+    const parts = toolMessage.content as any[];
+    expect(parts).toHaveLength(2);
+    expect(parts.find((p) => p.toolCallId === "call-a").output.value).toContain(
+      "alpha-contents",
+    );
+    expect(parts.find((p) => p.toolCallId === "call-b").output.value).toContain(
+      "beta-contents",
+    );
+  });
+
+  it("blocks tool calls when a preToolUse hook exits 2", async () => {
+    const cwd = makeTmpDir();
+    const { agent, events } = makeAgent({
+      cwd,
+      streams: [
+        textAndToolCallStream("Pushing.", "bash", { command: "git push" }),
+        finalTextStream("understood"),
+      ],
+      config: {
+        hooks: {
+          preToolUse: [
+            { match: "bash(git push*)", command: "echo 'protected branch' >&2; exit 2" },
+          ],
+        },
+      },
+    });
+    await agent.runTurn("push it");
+    const toolResult = (agent.messages[2]!.content as any[])[0];
+    expect(toolResult.output.type).toBe("error-text");
+    expect(toolResult.output.value).toContain("protected branch");
+    expect(events.some((e) => e.type === "tool-denied")).toBe(true);
+  });
+
+  it("appends postToolUse hook feedback to the tool result", async () => {
+    const cwd = makeTmpDir();
+    fs.writeFileSync(path.join(cwd, "hello.txt"), "hello world");
+    const { agent } = makeAgent({
+      cwd,
+      streams: [
+        textAndToolCallStream("Reading.", "read", { file_path: "hello.txt" }),
+        finalTextStream("done"),
+      ],
+      config: {
+        hooks: {
+          postToolUse: [{ match: "read", command: "echo 'double-check page 2'; exit 2" }],
+        },
+      },
+    });
+    await agent.runTurn("read it");
+    const toolResult = (agent.messages[2]!.content as any[])[0];
+    expect(toolResult.output.value).toContain("hello world");
+    expect(toolResult.output.value).toContain("HOOK FEEDBACK");
+    expect(toolResult.output.value).toContain("double-check page 2");
+  });
+
+  it("switches models mid-session with setModel", async () => {
+    const cwd = makeTmpDir();
+    const modelB = scriptedModel([finalTextStream("from model B")]);
+    const { agent } = makeAgent({
+      cwd,
+      streams: [finalTextStream("from model A")],
+    });
+    expect(await agent.runTurn("first")).toBe("from model A");
+    agent.setModel(modelB, 100_000);
+    expect(await agent.runTurn("second")).toBe("from model B");
+    expect(modelB.doStreamCalls).toHaveLength(1);
   });
 
   it("streams text deltas through the event bus", async () => {

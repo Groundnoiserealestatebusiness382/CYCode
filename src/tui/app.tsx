@@ -68,7 +68,8 @@ function App(props: {
   const [permission, setPermission] = useState<PendingPermission | null>(null);
   const [input, setInput] = useState("");
   const [mode, setMode] = useState<PermissionMode>(runtime.agent.mode);
-  const [modelSpec] = useState(runtime.modelSpec);
+  const [modelSpec, setModelSpec] = useState(runtime.modelSpec);
+  const [tokens, setTokens] = useState<{ input: number; output: number } | null>(null);
   const [frame, setFrame] = useState(0);
   const history = useRef<string[]>([]);
   const historyPos = useRef(-1);
@@ -115,6 +116,14 @@ function App(props: {
           break;
         case "compaction":
           push({ kind: "notice", text: "Context compacted" });
+          break;
+        case "turn-end":
+          if (event.usage.inputTokens || event.usage.outputTokens) {
+            setTokens({
+              input: event.usage.inputTokens ?? 0,
+              output: event.usage.outputTokens ?? 0,
+            });
+          }
           break;
         case "notice":
           push({ kind: "notice", text: event.message });
@@ -202,10 +211,13 @@ function App(props: {
             push({ kind: "notice", text: `Model: ${modelSpec}` });
             return true;
           }
-          push({
-            kind: "notice",
-            text: `Model switching applies to new sessions; restart with --model ${arg}. (Current: ${modelSpec})`,
-          });
+          try {
+            runtime.switchModel(arg);
+            setModelSpec(arg);
+            push({ kind: "notice", text: `Model switched to ${arg}` });
+          } catch (err) {
+            push({ kind: "error", text: err instanceof Error ? err.message : String(err) });
+          }
           return true;
         }
         case "/compact":
@@ -338,6 +350,9 @@ function App(props: {
       <Box marginTop={1}>
         <Text dimColor>
           {cwdName} · {modelSpec} · {mode}
+          {tokens
+            ? ` · ${(tokens.input / 1000).toFixed(1)}k in / ${(tokens.output / 1000).toFixed(1)}k out`
+            : ""}
         </Text>
       </Box>
     </Box>

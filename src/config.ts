@@ -17,6 +17,14 @@ export interface ProviderConfig {
   apiKeyEnv?: string;
 }
 
+export interface HookConfig {
+  /** Permission-key pattern the hook applies to, e.g. "bash(git push*)" or "edit". */
+  match: string;
+  /** Shell command to run. See docs/configuration.md for the env contract. */
+  command: string;
+  timeoutMs?: number;
+}
+
 export interface CycodeConfig {
   /** Default model spec, e.g. "anthropic/claude-sonnet-4-6". */
   model?: string;
@@ -25,6 +33,12 @@ export interface CycodeConfig {
   permissions?: { allow?: string[]; deny?: string[] };
   /** Command run after file edits; non-zero output is fed back to the model. */
   diagnostics?: { command?: string; timeoutMs?: number };
+  /**
+   * Shell hooks around tool execution. preToolUse runs before a tool
+   * (exit code 2 blocks the call); postToolUse runs after it succeeds
+   * (exit code 2 feeds the hook's output back to the model).
+   */
+  hooks?: { preToolUse?: HookConfig[]; postToolUse?: HookConfig[] };
   mcpServers?: Record<string, McpServerConfig>;
   /** Extra OpenAI-compatible providers keyed by name. */
   providers?: Record<string, ProviderConfig>;
@@ -63,6 +77,16 @@ export function loadConfig(cwd: string): CycodeConfig {
       deny: [
         ...(user.permissions?.deny ?? []),
         ...(project.permissions?.deny ?? []),
+      ],
+    },
+    hooks: {
+      preToolUse: [
+        ...(user.hooks?.preToolUse ?? []),
+        ...(project.hooks?.preToolUse ?? []),
+      ],
+      postToolUse: [
+        ...(user.hooks?.postToolUse ?? []),
+        ...(project.hooks?.postToolUse ?? []),
       ],
     },
     mcpServers: { ...user.mcpServers, ...project.mcpServers },
