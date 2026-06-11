@@ -25,7 +25,7 @@
 General coding agents stop at code. Research is code **plus** literature, experiments, notebooks, and papers — so CYCode makes them first-class tools, not afterthoughts:
 
 <p align="center">
-  <img src="assets/terminal.svg" alt="A CYCode session: /lit-review searches arXiv and Semantic Scholar, reads a paper PDF, and writes a literature review with BibTeX" width="92%">
+  <img src="assets/terminal.svg" alt="A CYCode session: /lit-review searches arXiv, reads a paper PDF, and writes a literature review with BibTeX" width="88%">
 </p>
 
 - 📚 **Papers** — `arxiv_search`, `paper_read` (PDF → text, page ranges), `semantic_scholar` (search + references). `/lit-review` produces structured notes with BibTeX — every citation comes from a real tool result, never from model memory.

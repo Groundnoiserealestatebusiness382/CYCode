@@ -1,45 +1,29 @@
-<svg width="980" height="600" viewBox="0 0 980 600" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="CYCode terminal session">
-  <defs>
-    <linearGradient id="tbg" x1="0" y1="0" x2="0" y2="600" gradientUnits="userSpaceOnUse">
-      <stop offset="0" stop-color="#11161f"/>
-      <stop offset="1" stop-color="#0d1117"/>
-    </linearGradient>
-  </defs>
-
+<svg width="900" height="430" viewBox="0 0 900 430" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="CYCode terminal session">
   <!-- window -->
-  <rect x="10" y="10" width="960" height="580" rx="14" fill="url(#tbg)" stroke="#2b3750" stroke-width="1.5"/>
-  <rect x="10" y="10" width="960" height="44" rx="14" fill="#161d2b"/>
-  <rect x="10" y="40" width="960" height="14" fill="#161d2b"/>
-  <circle cx="38" cy="32" r="6.5" fill="#f85149"/>
-  <circle cx="60" cy="32" r="6.5" fill="#d29922"/>
-  <circle cx="82" cy="32" r="6.5" fill="#3fb950"/>
-  <text x="490" y="38" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace" font-size="15" fill="#8b949e" text-anchor="middle">cycode — my-research-project</text>
+  <rect x="10" y="10" width="880" height="410" rx="14" fill="#0d1117"/>
+  <rect x="10.75" y="10.75" width="878.5" height="408.5" rx="13.25" stroke="#21293a" stroke-width="1.5"/>
+  <circle cx="40" cy="36" r="6" fill="#2c3850"/>
+  <circle cx="62" cy="36" r="6" fill="#2c3850"/>
+  <circle cx="84" cy="36" r="6" fill="#2c3850"/>
+  <text x="450" y="42" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace" font-size="14" fill="#5b6c8c" text-anchor="middle">cycode — my-research-project</text>
+  <line x1="10" y1="62" x2="890" y2="62" stroke="#21293a" stroke-width="1"/>
 
   <!-- session -->
-  <g font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace" font-size="16.5">
-    <text x="44" y="92" fill="#8b949e">CYCode v0.1.0 · anthropic/claude-sonnet-4-6 · default mode · /help for commands</text>
+  <g font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace" font-size="17">
+    <text x="48" y="110" fill="#58a6ff">›  <tspan fill="#e6edf3">/lit-review test-time compute scaling</tspan></text>
 
-    <text x="44" y="134" fill="#58a6ff">› <tspan fill="#e6edf3">/lit-review test-time compute scaling for reasoning</tspan></text>
+    <text x="48" y="160" fill="#3fb950">⏺  <tspan fill="#c9d4e3">arxiv_search("test-time compute")</tspan></text>
+    <text x="852" y="160" fill="#5b6c8c" text-anchor="end">10 papers</text>
 
-    <text x="44" y="176" fill="#3fb950">⏺ <tspan fill="#e6edf3">arxiv_search(ti:"test-time compute" AND cat:cs.LG)</tspan></text>
-    <text x="66" y="202" fill="#8b949e">⎿ 10 papers · 2024–2026 (1.2s)</text>
+    <text x="48" y="202" fill="#3fb950">⏺  <tspan fill="#c9d4e3">paper_read(2408.03314)</tspan></text>
+    <text x="852" y="202" fill="#5b6c8c" text-anchor="end">58 pages</text>
 
-    <text x="44" y="240" fill="#3fb950">⏺ <tspan fill="#e6edf3">semantic_scholar(test-time compute scaling reasoning)</tspan></text>
-    <text x="66" y="266" fill="#8b949e">⎿ 10 results · top: 1,847 citations (0.8s)</text>
+    <text x="48" y="244" fill="#d29922">⏺  <tspan fill="#c9d4e3">write(lit-review.md)</tspan></text>
+    <text x="852" y="244" fill="#5b6c8c" text-anchor="end">allowed · 9.4 KB</text>
 
-    <text x="44" y="304" fill="#3fb950">⏺ <tspan fill="#e6edf3">paper_read(2408.03314, pages 1–8)</tspan></text>
-    <text x="66" y="330" fill="#8b949e">⎿ 58 pages · extracted method + scaling results (3.4s)</text>
+    <text x="48" y="304" fill="#e6edf3">Reviewed 12 papers across three lines of work.</text>
+    <text x="48" y="336" fill="#e6edf3">Notes + BibTeX → <tspan fill="#58a6ff">lit-review.md</tspan></text>
 
-    <text x="44" y="368" fill="#d29922">⏺ <tspan fill="#e6edf3">write(lit-review-test-time-compute.md)</tspan></text>
-    <text x="66" y="394" fill="#8b949e">⎿ permission: <tspan fill="#d29922">y</tspan> allow · 9.4 KB written (0.1s)</text>
-
-    <text x="44" y="436" fill="#e6edf3">Reviewed 12 papers across three lines of work — sequential revision,</text>
-    <text x="44" y="462" fill="#e6edf3">parallel sampling + verification, and hybrid search. Notes, comparison</text>
-    <text x="44" y="488" fill="#e6edf3">table, and BibTeX → <tspan fill="#58a6ff">lit-review-test-time-compute.md</tspan></text>
-
-    <!-- todo strip -->
-    <text x="44" y="528" fill="#3fb950">☑ search arXiv + S2   ☑ read 3 central papers   ☑ write review + BibTeX</text>
-
-    <text x="44" y="566" fill="#58a6ff">› <tspan fill="#39455c">launch the ablation sweep and watch it_</tspan></text>
+    <text x="48" y="392" fill="#58a6ff">›  <tspan fill="#39455c">_</tspan></text>
   </g>
 </svg>

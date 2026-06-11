@@ -1,67 +1,32 @@
-<svg width="1200" height="320" viewBox="0 0 1200 320" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="CYCode — the coding agent for AI research">
+<svg width="1200" height="260" viewBox="0 0 1200 260" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="CYCode — the open-source coding agent built for AI research">
   <defs>
-    <linearGradient id="bg" x1="0" y1="0" x2="1200" y2="320" gradientUnits="userSpaceOnUse">
-      <stop offset="0" stop-color="#0b0f17"/>
-      <stop offset="0.55" stop-color="#0d1422"/>
-      <stop offset="1" stop-color="#101b2e"/>
-    </linearGradient>
     <linearGradient id="accent" x1="0" y1="0" x2="1" y2="1">
       <stop offset="0" stop-color="#58a6ff"/>
       <stop offset="1" stop-color="#3fb950"/>
     </linearGradient>
-    <radialGradient id="glow" cx="0.5" cy="0.5" r="0.5">
-      <stop offset="0" stop-color="#58a6ff" stop-opacity="0.22"/>
+    <radialGradient id="glow" cx="0.32" cy="0.5" r="0.55">
+      <stop offset="0" stop-color="#58a6ff" stop-opacity="0.10"/>
       <stop offset="1" stop-color="#58a6ff" stop-opacity="0"/>
     </radialGradient>
-    <pattern id="grid" width="36" height="36" patternUnits="userSpaceOnUse">
-      <path d="M36 0H0V36" stroke="#1d2738" stroke-width="1" fill="none"/>
-    </pattern>
   </defs>
 
-  <rect width="1200" height="320" rx="14" fill="url(#bg)"/>
-  <rect width="1200" height="320" rx="14" fill="url(#grid)" opacity="0.5"/>
-  <circle cx="190" cy="160" r="220" fill="url(#glow)"/>
+  <rect width="1200" height="260" rx="16" fill="#0d1117"/>
+  <rect x="0.75" y="0.75" width="1198.5" height="258.5" rx="15.25" stroke="#21293a" stroke-width="1.5"/>
+  <rect width="1200" height="260" rx="16" fill="url(#glow)"/>
 
-  <!-- logo mark: hexagon + orbit + nucleus -->
-  <g transform="translate(190 160)">
-    <path d="M0,-74 64,-37 64,37 0,74 -64,37 -64,-37Z" stroke="url(#accent)" stroke-width="6" fill="#0d1117" stroke-linejoin="round"/>
-    <ellipse rx="46" ry="18" transform="rotate(-24)" stroke="#58a6ff" stroke-width="3.5" opacity="0.9"/>
-    <ellipse rx="46" ry="18" transform="rotate(64)" stroke="#3fb950" stroke-width="3.5" opacity="0.75"/>
-    <circle r="9" fill="url(#accent)"/>
-    <circle cx="40" cy="-21" r="4.5" fill="#58a6ff"/>
-    <circle cx="-34" cy="32" r="4.5" fill="#3fb950"/>
+  <!-- mark: hexagon, one orbit, nucleus -->
+  <g transform="translate(400 116)">
+    <path d="M0,-52 45,-26 45,26 0,52 -45,26 -45,-26Z" stroke="url(#accent)" stroke-width="5" fill="none" stroke-linejoin="round"/>
+    <ellipse rx="30" ry="12" transform="rotate(-28)" stroke="#8b949e" stroke-width="2.5" opacity="0.85"/>
+    <circle r="7" fill="url(#accent)"/>
   </g>
 
-  <!-- wordmark -->
+  <!-- wordmark + tagline -->
   <g font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">
-    <text x="320" y="150" font-size="84" font-weight="800" fill="#e6edf3" letter-spacing="-2">CY<tspan fill="#58a6ff">Code</tspan></text>
-    <text x="324" y="196" font-size="25" fill="#9db1c9" letter-spacing="0.2">The open-source coding agent built for AI research</text>
-
-    <!-- feature chips -->
-    <g font-size="16.5" font-weight="600">
-      <rect x="324" y="222" width="86" height="34" rx="17" fill="#13203a" stroke="#2a3f63"/>
-      <text x="367" y="244" fill="#58a6ff" text-anchor="middle">papers</text>
-      <rect x="420" y="222" width="128" height="34" rx="17" fill="#13203a" stroke="#2a3f63"/>
-      <text x="484" y="244" fill="#58a6ff" text-anchor="middle">experiments</text>
-      <rect x="558" y="222" width="118" height="34" rx="17" fill="#13203a" stroke="#2a3f63"/>
-      <text x="617" y="244" fill="#58a6ff" text-anchor="middle">notebooks</text>
-      <rect x="686" y="222" width="80" height="34" rx="17" fill="#13203a" stroke="#2a3f63"/>
-      <text x="726" y="244" fill="#58a6ff" text-anchor="middle">LaTeX</text>
-      <rect x="776" y="222" width="74" height="34" rx="17" fill="#102a1c" stroke="#23513a"/>
-      <text x="813" y="244" fill="#3fb950" text-anchor="middle">code</text>
-      <rect x="860" y="222" width="80" height="34" rx="17" fill="#102a1c" stroke="#23513a"/>
-      <text x="900" y="244" fill="#3fb950" text-anchor="middle">loops</text>
-    </g>
+    <text x="478" y="106" font-size="64" font-weight="800" fill="#e6edf3" letter-spacing="-1.5">CY<tspan fill="#58a6ff">Code</tspan></text>
+    <text x="482" y="146" font-size="21" fill="#8b949e">The open-source coding agent built for AI research</text>
   </g>
 
-  <!-- terminal hint, right side -->
-  <g font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace" font-size="17">
-    <rect x="952" y="58" width="216" height="140" rx="10" fill="#0d1117" stroke="#263149"/>
-    <circle cx="974" cy="80" r="5" fill="#f85149"/>
-    <circle cx="992" cy="80" r="5" fill="#d29922"/>
-    <circle cx="1010" cy="80" r="5" fill="#3fb950"/>
-    <text x="972" y="118" fill="#58a6ff">›<tspan fill="#e6edf3" dx="8">cycode</tspan></text>
-    <text x="972" y="146" fill="#8b949e">⏺ arxiv_search(…)</text>
-    <text x="972" y="174" fill="#8b949e">⏺ exp_run(train.py)</text>
-  </g>
+  <!-- single muted feature line -->
+  <text x="600" y="216" font-size="17" fill="#5b6c8c" text-anchor="middle" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace" letter-spacing="0.5">papers · experiments · notebooks · LaTeX · code · loops</text>
 </svg>
