@@ -1,0 +1,13 @@
+{
+  "model": "anthropic/claude-sonnet-4-6",
+  "smallModel": "anthropic/claude-haiku-4-5-20251001",
+  "permissions": {
+    "allow": ["bash(git status)", "bash(git diff*)", "bash(npm run *)", "latex_build"],
+    "deny": ["bash(rm -rf *)"]
+  },
+  "diagnostics": { "command": "npm run typecheck", "timeoutMs": 60000 },
+  "mcpServers": {},
+  "providers": {
+    "vllm": { "baseURL": "http://localhost:8000/v1", "apiKeyEnv": "VLLM_API_KEY" }
+  }
+}

@@ -170,7 +170,13 @@ export class Agent {
           messages: this.messages,
           tools: this.aiTools,
           abortSignal: signal,
+          // errors surface as 'error' stream parts handled below; the SDK default
+          // would also dump them to console.error, corrupting the TUI
+          onError: () => {},
         });
+        // if the stream throws we bail before awaiting response; stop that
+        // pending promise from becoming an unhandled rejection
+        Promise.resolve(result.response).catch(() => {});
 
         const toolCalls: { toolCallId: string; toolName: string; input: unknown }[] = [];
         let stepText = "";
