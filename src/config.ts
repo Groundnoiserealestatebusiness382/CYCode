@@ -39,6 +39,12 @@ export interface CycodeConfig {
    * (exit code 2 feeds the hook's output back to the model).
    */
   hooks?: { preToolUse?: HookConfig[]; postToolUse?: HookConfig[] };
+  /**
+   * OS-level sandbox for shell commands (bash, exp_run): writes confined to
+   * the project dir + tmp. macOS: Seatbelt; Linux: bubblewrap. Fails closed
+   * when the backend is unavailable.
+   */
+  sandbox?: { bash?: boolean; allowNetwork?: boolean };
   mcpServers?: Record<string, McpServerConfig>;
   /** Extra OpenAI-compatible providers keyed by name. */
   providers?: Record<string, ProviderConfig>;

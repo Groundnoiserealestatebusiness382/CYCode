@@ -6,6 +6,17 @@ All notable changes to CYCode are documented here. The format follows
 
 ## [Unreleased]
 
+## [0.3.0] - 2026-06-12
+
+### Added
+- **OS-level sandbox** for shell commands (`bash`, `exp_run`): writes confined to
+  the project directory + tmp, enforced by the kernel. macOS via Seatbelt
+  (`sandbox-exec`), Linux via bubblewrap; **fails closed** when the backend is
+  unavailable. Enable with `"sandbox": { "bash": true }` in config or the
+  `--sandbox` flag on any command. `allowNetwork: false` additionally cuts off
+  outbound network. Combined with permission rules and hooks this completes the
+  layered model for unattended loops: `cycode exec --mode bypass --sandbox`.
+
 ## [0.2.0] - 2026-06-11
 
 ### Added
@@ -61,6 +72,7 @@ Initial release.
 - Post-edit diagnostics command with model feedback.
 - 51 vitest tests including mock-model agent-loop integration.
 
-[Unreleased]: https://github.com/ChaoYue0307/CYCode/compare/v0.2.0...HEAD
+[Unreleased]: https://github.com/ChaoYue0307/CYCode/compare/v0.3.0...HEAD
+[0.3.0]: https://github.com/ChaoYue0307/CYCode/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/ChaoYue0307/CYCode/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/ChaoYue0307/CYCode/releases/tag/v0.1.0

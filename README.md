@@ -132,7 +132,12 @@ Allow/deny rules use Claude Code-style patterns, and "always allow" answers pers
 }
 ```
 
-Deny rules win over everything — including read-only tools and `bypass` mode. For deterministic guardrails beyond rules, **hooks** run shell commands before/after tool calls and can block them (exit 2) — e.g. forbid force-pushes no matter what the model decides. Full grammar and the hook contract in [docs/configuration.md](docs/configuration.md).
+Deny rules win over everything — including read-only tools and `bypass` mode. Two more layers stack on top:
+
+- **Hooks** — shell commands before/after tool calls that can block them deterministically (exit 2), e.g. forbid force-pushes no matter what the model decides.
+- **Sandbox** (`--sandbox`) — kernel-level confinement of shell commands to the project dir + tmp (macOS Seatbelt / Linux bubblewrap, fail-closed). `cycode exec "..." --mode bypass --sandbox` is full autonomy inside a write-fence.
+
+Full grammar, hook contract, and sandbox details in [docs/configuration.md](docs/configuration.md).
 
 ## Skills
 
@@ -176,11 +181,11 @@ CYCode doesn't try to beat the big harnesses at general software engineering —
 - [x] Hooks (pre/post tool-use shell guardrails)
 - [x] Parallel execution of read-only tool batches (incl. `explore` fan-out)
 - [x] Runtime model switching (`/model`) and session token tracking
+- [x] OS-level bash sandboxing (macOS Seatbelt / Linux bubblewrap, `--sandbox`)
 - [ ] npm package release (`npm i -g cycode`)
 - [ ] Native desktop app (Tauri) wrapping the GUI
 - [ ] wandb / tensorboard native integration for `exp_status`
 - [ ] LSP-based diagnostics (currently command-based)
-- [ ] OS-level bash sandboxing (Seatbelt / Landlock, Codex-style)
 
 Have an idea? [Open an issue](https://github.com/ChaoYue0307/CYCode/issues/new/choose).
 

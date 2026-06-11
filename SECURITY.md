@@ -18,6 +18,9 @@ permission system. Things to understand before filing:
 - Prompt injection via fetched web pages, papers, or MCP tool output is an inherent
   risk of agentic tools. The permission gate is the mitigation; reports that
   demonstrate gate bypass through injected content are very welcome.
+- When the sandbox is enabled (`--sandbox`), shell commands writing outside the
+  project directory + tmp, or the sandbox silently degrading to unconfined
+  execution instead of failing closed, are vulnerabilities — please report them.
 - The web GUI binds to `127.0.0.1` only and must stay that way; anything that exposes
   it to the network is a vulnerability.
 - API keys are read from environment variables and never written to disk by CYCode.

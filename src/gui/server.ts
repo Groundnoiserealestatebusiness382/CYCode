@@ -20,6 +20,7 @@ export interface GuiOptions {
   continueSession?: boolean;
   /** Open the system browser once the server is listening (default true). */
   openBrowser?: boolean;
+  sandbox?: boolean;
 }
 
 /** Condense persisted ModelMessages into displayable events for transcript replay. */
@@ -126,6 +127,7 @@ export async function startGui(opts: GuiOptions): Promise<void> {
     modelSpec: opts.modelSpec,
     mode: opts.mode,
     continueSession: opts.continueSession,
+    sandbox: opts.sandbox,
     arbiter: (req) =>
       new Promise<PermissionDecision>((resolve) => {
         const id = crypto.randomUUID();

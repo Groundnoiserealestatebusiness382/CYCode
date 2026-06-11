@@ -1,6 +1,7 @@
 import { spawn } from "node:child_process";
 import { z } from "zod";
 import type { CycodeTool } from "../types.js";
+import { shellSpawn } from "../../util/sandbox.js";
 
 const DEFAULT_TIMEOUT_MS = 120_000;
 const MAX_TIMEOUT_MS = 600_000;
@@ -35,8 +36,9 @@ export const bashTool: CycodeTool<{
   describeCall: (i) => `bash(${i.command.length > 120 ? i.command.slice(0, 120) + "…" : i.command})`,
   async execute(input, ctx) {
     const timeout = Math.min(input.timeout_ms ?? DEFAULT_TIMEOUT_MS, MAX_TIMEOUT_MS);
+    const { file, args } = shellSpawn(input.command, ctx.config, ctx.cwd);
     return new Promise<string>((resolve, reject) => {
-      const child = spawn("/bin/bash", ["-c", input.command], {
+      const child = spawn(file, args, {
         cwd: ctx.cwd,
         env: process.env,
         stdio: ["ignore", "pipe", "pipe"],

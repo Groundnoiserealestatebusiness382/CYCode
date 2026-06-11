@@ -4,6 +4,7 @@ import { spawn } from "node:child_process";
 import { z } from "zod";
 import type { CycodeTool } from "../types.js";
 import { ensureDir } from "../../util/paths.js";
+import { shellSpawn } from "../../util/sandbox.js";
 
 export interface RunRecord {
   id: string;
@@ -76,7 +77,8 @@ export const expRunTool: CycodeTool<{ command: string; name?: string }> = {
       Math.random().toString(36).slice(2, 6);
     const logFile = path.join(runsDir(ctx.cwd), `${id}.log`);
     const fd = fs.openSync(logFile, "a");
-    const child = spawn("/bin/bash", ["-c", input.command], {
+    const { file, args } = shellSpawn(input.command, ctx.config, ctx.cwd);
+    const child = spawn(file, args, {
       cwd: ctx.cwd,
       detached: true,
       stdio: ["ignore", fd, fd],

@@ -26,6 +26,8 @@ export interface RuntimeOptions {
   /** Skip session persistence entirely (used by exec mode by default). */
   noSession?: boolean;
   maxStepsPerTurn?: number;
+  /** Force OS-level sandboxing of shell commands regardless of config. */
+  sandbox?: boolean;
   onNotice?: (message: string) => void;
 }
 
@@ -43,6 +45,7 @@ export interface Runtime {
 
 export async function createRuntime(opts: RuntimeOptions): Promise<Runtime> {
   const config = loadConfig(opts.cwd);
+  if (opts.sandbox) config.sandbox = { ...config.sandbox, bash: true };
   const modelSpec = opts.modelSpec ?? defaultModelSpec(config);
   const model = resolveModel(modelSpec, config);
   const smallSpec = smallModelSpec(config, modelSpec);

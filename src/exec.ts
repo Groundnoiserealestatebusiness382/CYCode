@@ -10,6 +10,7 @@ export interface ExecOptions {
   json: boolean;
   maxSteps?: number;
   continueSession?: boolean;
+  sandbox?: boolean;
 }
 
 /**
@@ -26,6 +27,7 @@ export async function runExec(opts: ExecOptions): Promise<number> {
     modelSpec: opts.modelSpec,
     mode: opts.mode ?? "default",
     maxStepsPerTurn: opts.maxSteps ?? 60,
+    sandbox: opts.sandbox,
     // Without a human present, anything not pre-authorized by mode/rules is denied.
     arbiter: async (req) => ({
       behavior: "deny",

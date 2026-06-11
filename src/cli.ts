@@ -25,6 +25,8 @@ Options:
       --max-steps <n>          (exec) cap model/tool round-trips (default 60)
       --port <n>               (ui) port to listen on (default 7833)
       --no-open                (ui) don't open the browser automatically
+      --sandbox                confine shell commands to project dir + tmp
+                               (macOS: Seatbelt, Linux: bubblewrap; fails closed)
   -v, --version                print version
   -h, --help                   show this help
 
@@ -45,6 +47,7 @@ interface ParsedArgs {
   maxSteps?: number;
   port: number;
   open: boolean;
+  sandbox: boolean;
 }
 
 function parseArgs(argv: string[]): ParsedArgs {
@@ -55,6 +58,7 @@ function parseArgs(argv: string[]): ParsedArgs {
     json: false,
     port: 7833,
     open: true,
+    sandbox: false,
   };
   const positional: string[] = [];
   for (let i = 0; i < argv.length; i++) {
@@ -109,6 +113,9 @@ function parseArgs(argv: string[]): ParsedArgs {
       case "--no-open":
         args.open = false;
         break;
+      case "--sandbox":
+        args.sandbox = true;
+        break;
       default:
         if (a.startsWith("-")) throw new Error(`Unknown option: ${a} (see --help)`);
         positional.push(a);
@@ -148,6 +155,7 @@ async function main(): Promise<void> {
       json: args.json,
       maxSteps: args.maxSteps,
       continueSession: args.continueSession,
+      sandbox: args.sandbox,
     });
     process.exit(code);
   }
@@ -160,6 +168,7 @@ async function main(): Promise<void> {
       port: args.port,
       continueSession: args.continueSession,
       openBrowser: args.open,
+      sandbox: args.sandbox,
     });
     return; // server keeps the process alive
   }
@@ -173,6 +182,7 @@ async function main(): Promise<void> {
     mode: args.mode,
     continueSession: args.continueSession,
     resumeId: args.resumeId,
+    sandbox: args.sandbox,
     arbiter: (req) =>
       arbiterRef.current
         ? arbiterRef.current(req)

@@ -104,6 +104,28 @@ postToolUse — `CYCODE_TOOL_OUTPUT` (first 8 KB). Default timeout 30 s
   "command": "echo \\"$CYCODE_TOOL_INPUT\\" | grep -q -- --force && { echo 'no force pushes' >&2; exit 2; } || exit 0" }
 ```
 
+## Sandbox
+
+Opt-in OS-level confinement for shell commands (`bash` and `exp_run`):
+
+```jsonc
+{ "sandbox": { "bash": true, "allowNetwork": true } }
+```
+
+or per-invocation with `--sandbox` (works with `cycode`, `cycode ui`, and
+`cycode exec`). When enabled, commands can **read anything but write only inside
+the project directory and tmp** — enforced by the kernel, not by prompts:
+
+- **macOS**: Seatbelt (`sandbox-exec`) with a workspace-write profile.
+- **Linux**: bubblewrap (`bwrap`); install it or the sandbox **fails closed**
+  (the command errors rather than running unconfined).
+- `allowNetwork: false` additionally cuts off outbound network.
+
+The layered model for unattended runs: permission rules decide *which* commands
+run, hooks veto specific calls deterministically, and the sandbox bounds what any
+command can touch even if the first two layers were misconfigured. For full
+autonomy inside a write-fence: `cycode exec "..." --mode bypass --sandbox`.
+
 ## Context files
 
 CYCode loads into every session's system prompt:
