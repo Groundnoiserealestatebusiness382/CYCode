@@ -1,0 +1,78 @@
+{
+  "name": "cycode",
+  "version": "0.1.0",
+  "description": "CYCode — an open-source terminal coding agent for AI research: papers, experiments, notebooks, LaTeX, and code.",
+  "type": "module",
+  "license": "MIT",
+  "author": "ChaoYue0307 <hechaoyue0307@gmail.com>",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ChaoYue0307/CYCode.git"
+  },
+  "homepage": "https://github.com/ChaoYue0307/CYCode#readme",
+  "bugs": {
+    "url": "https://github.com/ChaoYue0307/CYCode/issues"
+  },
+  "keywords": [
+    "ai",
+    "agent",
+    "coding-agent",
+    "cli",
+    "terminal",
+    "ai-research",
+    "arxiv",
+    "jupyter",
+    "latex",
+    "llm"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
+  "bin": {
+    "cycode": "./dist/cli.js"
+  },
+  "main": "./dist/cli.js",
+  "files": [
+    "dist",
+    "skills",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsx src/cli.ts",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint src test",
+    "prepublishOnly": "npm run typecheck && npm run test && npm run build"
+  },
+  "dependencies": {
+    "@ai-sdk/anthropic": "^3.0.82",
+    "@ai-sdk/google": "^3.0.80",
+    "@ai-sdk/openai": "^3.0.69",
+    "@ai-sdk/openai-compatible": "^2.0.48",
+    "@modelcontextprotocol/sdk": "^1.29.0",
+    "ai": "^6.0.200",
+    "fast-glob": "^3.3.3",
+    "fast-xml-parser": "^5.8.0",
+    "gray-matter": "^4.0.3",
+    "ink": "^7.0.5",
+    "ink-text-input": "^6.0.0",
+    "picocolors": "^1.1.1",
+    "react": "^19.2.7",
+    "unpdf": "^1.6.2",
+    "zod": "^4.4.3"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.39.4",
+    "@types/node": "^25.9.3",
+    "@types/react": "^19.2.17",
+    "eslint": "^9.39.4",
+    "tsup": "^8.5.1",
+    "tsx": "^4.22.4",
+    "typescript": "^6.0.3",
+    "typescript-eslint": "^8.61.0",
+    "vitest": "^3.2.6"
+  }
+}
