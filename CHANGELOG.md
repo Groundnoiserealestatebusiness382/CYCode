@@ -27,6 +27,11 @@ Initial release.
 - MCP client (stdio + streamable HTTP).
 - Three frontends: Ink terminal REPL, local web GUI (`cycode ui`), headless
   `cycode exec --json`.
+- GUI: sessions sidebar with one-click resume (transcript replay), markdown
+  rendering, live task panel, permission dialogs, auto-opens the browser
+  (`--no-open` to disable).
+- Standalone binaries for macOS (arm64/x64), Linux (x64/arm64), and Windows (x64),
+  compiled with Bun and attached to GitHub Releases — no Node required.
 - Post-edit diagnostics command with model feedback.
 - 51 vitest tests including mock-model agent-loop integration.
 

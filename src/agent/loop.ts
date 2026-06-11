@@ -46,6 +46,7 @@ export class Agent {
   private readonly gate: PermissionGate;
   private readonly toolByName: Map<string, CycodeTool>;
   private readonly aiTools: ToolSet;
+  private session?: SessionStore;
   private lastPromptTokens: number | undefined;
   private abortController: AbortController | null = null;
   busy = false;
@@ -69,7 +70,20 @@ export class Agent {
         tool({ description: t.description, inputSchema: t.inputSchema }),
       ]),
     );
-    if (opts.session) this.messages = opts.session.loadMessages();
+    this.session = opts.session;
+    if (this.session) this.messages = this.session.loadMessages();
+  }
+
+  get sessionMeta(): SessionStore["meta"] | undefined {
+    return this.session?.meta;
+  }
+
+  /** Swap to another session's history (GUI session switching). */
+  loadSession(store: SessionStore): void {
+    if (this.busy) throw new Error("Cannot switch sessions while a turn is running");
+    this.session = store;
+    this.messages = store.loadMessages();
+    this.todos = [];
   }
 
   get mode(): PermissionMode {
@@ -90,7 +104,7 @@ export class Agent {
 
   private pushMessage(message: ModelMessage): void {
     this.messages.push(message);
-    this.opts.session?.appendMessage(message);
+    this.session?.appendMessage(message);
   }
 
   private makeToolContext(signal: AbortSignal): ToolContext {
@@ -141,7 +155,7 @@ export class Agent {
       },
     ];
     this.lastPromptTokens = undefined;
-    this.opts.session?.appendCompaction(summary);
+    this.session?.appendCompaction(summary);
     this.emit({ type: "compaction", summary });
   }
 

@@ -14,7 +14,10 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    "types": ["node"]
+    "types": ["node"],
+    "paths": {
+      "react-devtools-core": ["./scripts/empty-module.mjs"]
+    }
   },
   "include": ["src", "test"]
 }

@@ -25,6 +25,7 @@ Options:
       --json                   (exec) emit JSONL events on stdout
       --max-steps <n>          (exec) cap model/tool round-trips (default 60)
       --port <n>               (ui) port to listen on (default 7833)
+      --no-open                (ui) don't open the browser automatically
   -v, --version                print version
   -h, --help                   show this help
 
@@ -44,6 +45,7 @@ interface ParsedArgs {
   json: boolean;
   maxSteps?: number;
   port: number;
+  open: boolean;
 }
 
 function parseArgs(argv: string[]): ParsedArgs {
@@ -53,6 +55,7 @@ function parseArgs(argv: string[]): ParsedArgs {
     cwd: process.cwd(),
     json: false,
     port: 7833,
+    open: true,
   };
   const positional: string[] = [];
   for (let i = 0; i < argv.length; i++) {
@@ -104,6 +107,9 @@ function parseArgs(argv: string[]): ParsedArgs {
       case "--port":
         args.port = Number(next());
         break;
+      case "--no-open":
+        args.open = false;
+        break;
       default:
         if (a.startsWith("-")) throw new Error(`Unknown option: ${a} (see --help)`);
         positional.push(a);
@@ -154,6 +160,7 @@ async function main(): Promise<void> {
       mode: args.mode,
       port: args.port,
       continueSession: args.continueSession,
+      openBrowser: args.open,
     });
     return; // server keeps the process alive
   }

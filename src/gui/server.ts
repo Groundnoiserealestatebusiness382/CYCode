@@ -1,7 +1,10 @@
 import crypto from "node:crypto";
 import http from "node:http";
+import { spawn } from "node:child_process";
+import type { ModelMessage } from "ai";
 import { createRuntime } from "../runtime.js";
 import { expandSlashCommand } from "../skills/skills.js";
+import { SessionStore } from "../session/store.js";
 import {
   PERMISSION_MODES,
   type PermissionDecision,
@@ -15,6 +18,74 @@ export interface GuiOptions {
   mode?: PermissionMode;
   port: number;
   continueSession?: boolean;
+  /** Open the system browser once the server is listening (default true). */
+  openBrowser?: boolean;
+}
+
+/** Condense persisted ModelMessages into displayable events for transcript replay. */
+export function messagesToEvents(messages: ModelMessage[]): unknown[] {
+  const events: unknown[] = [];
+  // tool results indexed by call id so calls and outcomes render as one card
+  const results = new Map<string, { output: string; ok: boolean }>();
+  for (const m of messages) {
+    if (m.role !== "tool" || !Array.isArray(m.content)) continue;
+    for (const part of m.content) {
+      if (part.type !== "tool-result") continue;
+      const out = part.output;
+      if (out.type === "text" || out.type === "error-text") {
+        results.set(part.toolCallId, { output: out.value, ok: out.type === "text" });
+      } else if (out.type === "execution-denied") {
+        results.set(part.toolCallId, { output: out.reason ?? "denied", ok: false });
+      }
+    }
+  }
+  for (const m of messages) {
+    if (m.role === "user" && typeof m.content === "string") {
+      events.push({ type: "user", text: m.content });
+    } else if (m.role === "assistant") {
+      if (typeof m.content === "string") {
+        if (m.content) events.push({ type: "text-end", text: m.content });
+        continue;
+      }
+      for (const part of m.content) {
+        if (part.type === "text" && part.text) {
+          events.push({ type: "text-end", text: part.text });
+        } else if (part.type === "tool-call") {
+          const result = results.get(part.toolCallId);
+          events.push({
+            type: "tool-start",
+            callId: part.toolCallId,
+            toolName: part.toolName,
+            description: part.toolName,
+            input: part.input,
+          });
+          events.push({
+            type: "tool-end",
+            callId: part.toolCallId,
+            toolName: part.toolName,
+            ok: result?.ok ?? true,
+            output: result?.output ?? "",
+            durationMs: 0,
+          });
+        }
+      }
+    }
+  }
+  return events;
+}
+
+function openInBrowser(url: string): void {
+  const [cmd, args] =
+    process.platform === "darwin"
+      ? ["open", [url]]
+      : process.platform === "win32"
+        ? ["cmd", ["/c", "start", "", url]]
+        : ["xdg-open", [url]];
+  try {
+    spawn(cmd, args as string[], { stdio: "ignore", detached: true }).unref();
+  } catch {
+    // user can open the printed URL themselves
+  }
 }
 
 function readBody(req: http.IncomingMessage): Promise<any> {
@@ -79,6 +150,7 @@ export async function startGui(opts: GuiOptions): Promise<void> {
     modes: PERMISSION_MODES,
     skills: runtime.skills.map((s) => ({ name: s.name, description: s.description })),
     todos: runtime.agent.todos,
+    sessionId: runtime.agent.sessionMeta?.id ?? null,
   });
 
   const server = http.createServer(async (req, res) => {
@@ -120,6 +192,21 @@ export async function startGui(opts: GuiOptions): Promise<void> {
         pendingPermissions.delete(id);
         resolve({ behavior: behavior === "allow" ? "allow" : "deny", always: !!always });
         json(res, 200, { ok: true });
+      } else if (req.method === "GET" && url.pathname === "/api/sessions") {
+        json(res, 200, {
+          sessions: SessionStore.list(opts.cwd).reverse(),
+          current: runtime.agent.sessionMeta?.id ?? null,
+        });
+      } else if (req.method === "POST" && url.pathname === "/api/session/load") {
+        const { id } = await readBody(req);
+        if (runtime.agent.busy) return json(res, 409, { error: "agent is busy" });
+        const store = SessionStore.open(opts.cwd, String(id));
+        runtime.agent.loadSession(store);
+        transcript.length = 0;
+        broadcast({ type: "reset" });
+        for (const event of messagesToEvents(runtime.agent.messages)) broadcast(event);
+        broadcast(state());
+        json(res, 200, { ok: true });
       } else if (req.method === "POST" && url.pathname === "/api/abort") {
         runtime.agent.abort();
         json(res, 200, { ok: true });
@@ -144,4 +231,5 @@ export async function startGui(opts: GuiOptions): Promise<void> {
   });
   const address = `http://127.0.0.1:${opts.port}`;
   process.stderr.write(`CYCode GUI: ${address}  (ctrl+c to stop)\n`);
+  if (opts.openBrowser !== false) openInBrowser(address);
 }

@@ -47,13 +47,31 @@ CYCode is a lean harness (~5K lines of strict TypeScript) written from scratch, 
 
 ## Install
 
+**Download a standalone binary** — no Node required — from the
+[latest release](https://github.com/ChaoYue0307/CYCode/releases/latest):
+
+| Platform | File |
+|---|---|
+| macOS (Apple Silicon) | `cycode-darwin-arm64.tar.gz` |
+| macOS (Intel) | `cycode-darwin-x64.tar.gz` |
+| Linux (x64) | `cycode-linux-x64.tar.gz` |
+| Linux (arm64) | `cycode-linux-arm64.tar.gz` |
+| Windows (x64) | `cycode-windows-x64.zip` |
+
+```sh
+tar xzf cycode-darwin-arm64.tar.gz && mv cycode-darwin-arm64 /usr/local/bin/cycode
+cycode --version
+```
+
+**Or build from source** (Node ≥ 20):
+
 ```sh
 git clone https://github.com/ChaoYue0307/CYCode && cd CYCode
 npm install && npm run build && npm link    # then: cycode
 ```
 
-Requires **Node ≥ 20**. Optional extras used when present: `rg` (faster grep), `latexmk`, `jupyter`.
-*(npm package publication is planned; not yet on the registry.)*
+Optional extras used when present: `rg` (faster grep), `latexmk`, `jupyter`.
+*(npm registry publication is planned.)*
 
 ## Quickstart
 
@@ -77,7 +95,7 @@ The agent core emits events through a bus and asks for permissions through an ar
 | | Interface | Built for |
 |---|---|---|
 | `cycode` | Ink terminal REPL — streaming output, tool-call log, y/a/n permission prompts, live todo list | daily interactive work |
-| `cycode ui` | local web GUI — dark theme, tool-call cards, permission dialogs, task sidebar. Bound to `127.0.0.1` only, no frontend build, works offline | reviewing longer sessions visually |
+| `cycode ui` | local web GUI — sessions sidebar with one-click resume, markdown rendering, tool-call cards, permission dialogs, task panel. Bound to `127.0.0.1` only, works offline | reviewing and resuming sessions visually |
 | `cycode exec` | one headless turn — JSONL events, meaningful exit codes, deny-by-default for anything unapproved | scripts, CI, recurring agent loops |
 
 <p align="center">
@@ -154,7 +172,9 @@ CYCode doesn't try to beat the big harnesses at general software engineering —
 
 ## Roadmap
 
+- [x] Standalone binaries for macOS / Linux / Windows (GitHub Releases)
 - [ ] npm package release (`npm i -g cycode`)
+- [ ] Native desktop app (Tauri) wrapping the GUI
 - [ ] wandb / tensorboard native integration for `exp_status`
 - [ ] LSP-based diagnostics (currently command-based)
 - [ ] OS-level bash sandboxing (Seatbelt / Landlock, Codex-style)

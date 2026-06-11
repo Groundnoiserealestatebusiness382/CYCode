@@ -1,8 +1,8 @@
 import fs from "node:fs";
 import path from "node:path";
-import { fileURLToPath } from "node:url";
 import matter from "gray-matter";
 import { cycodeHome } from "../util/paths.js";
+import { BUILTIN_SKILLS } from "./builtin.generated.js";
 
 export interface SkillMeta {
   name: string;
@@ -15,13 +15,8 @@ export interface Skill extends SkillMeta {
 }
 
 function builtinSkills(): Skill[] {
-  // package root /skills, reached from dist/cli.js (one level) or src/skills/skills.ts (two)
-  const here = path.dirname(fileURLToPath(import.meta.url));
-  for (const up of ["../..", ".."]) {
-    const skills = loadFromDir(path.resolve(here, up, "skills"), "builtin");
-    if (skills.length > 0) return skills;
-  }
-  return [];
+  // embedded at build time so they survive single-file binary compilation
+  return BUILTIN_SKILLS.map((s) => ({ ...s, source: "builtin" as const }));
 }
 
 function loadFromDir(dir: string, source: Skill["source"]): Skill[] {
