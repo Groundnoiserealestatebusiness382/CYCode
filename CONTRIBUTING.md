@@ -2,6 +2,7 @@
 
 Thanks for your interest! CYCode aims to stay a **lean** harness — the bar for adding
 core complexity is high; the bar for research tools and skills is lower.
+By participating you agree to the [Code of Conduct](CODE_OF_CONDUCT.md).
 
 ## Setup
 

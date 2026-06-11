@@ -1,0 +1,76 @@
+<svg width="980" height="640" viewBox="0 0 980 640" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="CYCode architecture">
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="4" orient="auto">
+      <path d="M0,0 L8,4 L0,8" stroke="#5b6c8c" stroke-width="1.6" fill="none"/>
+    </marker>
+  </defs>
+  <rect width="980" height="640" rx="14" fill="#0d1117"/>
+
+  <g font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">
+    <!-- frontends -->
+    <text x="490" y="44" font-size="15" fill="#8b949e" text-anchor="middle" letter-spacing="2">THREE FRONTENDS · ONE AGENT</text>
+
+    <g font-size="17" font-weight="600" text-anchor="middle">
+      <rect x="100" y="62" width="220" height="74" rx="10" fill="#13203a" stroke="#2a3f63" stroke-width="1.5"/>
+      <text x="210" y="93" fill="#e6edf3">cycode</text>
+      <text x="210" y="118" fill="#8b949e" font-size="14" font-weight="400">Ink terminal REPL</text>
+
+      <rect x="380" y="62" width="220" height="74" rx="10" fill="#13203a" stroke="#2a3f63" stroke-width="1.5"/>
+      <text x="490" y="93" fill="#e6edf3">cycode ui</text>
+      <text x="490" y="118" fill="#8b949e" font-size="14" font-weight="400">local web GUI · SSE</text>
+
+      <rect x="660" y="62" width="220" height="74" rx="10" fill="#13203a" stroke="#2a3f63" stroke-width="1.5"/>
+      <text x="770" y="93" fill="#e6edf3">cycode exec</text>
+      <text x="770" y="118" fill="#8b949e" font-size="14" font-weight="400">headless · JSONL · loops/CI</text>
+    </g>
+
+    <path d="M210 136 V176 H468 V196" stroke="#5b6c8c" stroke-width="1.6" marker-end="url(#arrow)" fill="none"/>
+    <path d="M490 136 V196" stroke="#5b6c8c" stroke-width="1.6" marker-end="url(#arrow)" fill="none"/>
+    <path d="M770 136 V176 H512 V196" stroke="#5b6c8c" stroke-width="1.6" marker-end="url(#arrow)" fill="none"/>
+
+    <!-- agent core -->
+    <rect x="170" y="200" width="640" height="120" rx="12" fill="#101b2e" stroke="#58a6ff" stroke-width="1.8"/>
+    <text x="490" y="231" font-size="19" font-weight="700" fill="#58a6ff" text-anchor="middle">Agent core — event bus · turn loop</text>
+    <g font-size="14.5" fill="#9db1c9" text-anchor="middle">
+      <text x="490" y="259">streamed tool calls → permission gate → execute → feed results back</text>
+      <text x="490" y="282">compaction at ~80% context · JSONL session rollouts · abort recovery</text>
+      <text x="490" y="305">AGENTS.md context · markdown skills · explore subagent</text>
+    </g>
+
+    <path d="M330 320 V354" stroke="#5b6c8c" stroke-width="1.6" marker-end="url(#arrow)" fill="none"/>
+    <path d="M650 320 V354" stroke="#5b6c8c" stroke-width="1.6" marker-end="url(#arrow)" fill="none"/>
+
+    <!-- permission gate -->
+    <rect x="200" y="358" width="260" height="64" rx="10" fill="#241d10" stroke="#d29922" stroke-width="1.6"/>
+    <text x="330" y="385" font-size="16" font-weight="600" fill="#d29922" text-anchor="middle">Permission gate</text>
+    <text x="330" y="407" font-size="13.5" fill="#9d8b62" text-anchor="middle">modes · allow/deny rules · arbiter</text>
+
+    <!-- provider layer -->
+    <rect x="520" y="358" width="260" height="64" rx="10" fill="#13203a" stroke="#2a3f63" stroke-width="1.5"/>
+    <text x="650" y="385" font-size="16" font-weight="600" fill="#e6edf3" text-anchor="middle">Model providers (AI SDK)</text>
+    <text x="650" y="407" font-size="13.5" fill="#8b949e" text-anchor="middle">Anthropic · OpenAI · Google · Ollama · any</text>
+
+    <path d="M330 422 V456" stroke="#5b6c8c" stroke-width="1.6" marker-end="url(#arrow)" fill="none"/>
+
+    <!-- tools -->
+    <rect x="60" y="460" width="860" height="150" rx="12" fill="#0f1626" stroke="#263149" stroke-width="1.5"/>
+    <text x="490" y="489" font-size="15" fill="#8b949e" text-anchor="middle" letter-spacing="2">ONE TOOL INTERFACE — EVERY CALL GATED</text>
+
+    <g font-size="14.5" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace" text-anchor="middle">
+      <rect x="92" y="506" width="252" height="84" rx="8" fill="#102a1c" stroke="#23513a"/>
+      <text x="218" y="530" fill="#3fb950" font-weight="700" font-family="-apple-system, sans-serif">Core</text>
+      <text x="218" y="553" fill="#9db1c9">read · write · edit · glob</text>
+      <text x="218" y="574" fill="#9db1c9">grep · bash · web_fetch · todo</text>
+
+      <rect x="364" y="506" width="306" height="84" rx="8" fill="#13203a" stroke="#2a3f63"/>
+      <text x="517" y="530" fill="#58a6ff" font-weight="700" font-family="-apple-system, sans-serif">Research</text>
+      <text x="517" y="553" fill="#9db1c9">arxiv · paper_read · s2 · notebook</text>
+      <text x="517" y="574" fill="#9db1c9">exp_run/status · latex_build</text>
+
+      <rect x="690" y="506" width="198" height="84" rx="8" fill="#231326" stroke="#4a2a52"/>
+      <text x="789" y="530" fill="#d2a8ff" font-weight="700" font-family="-apple-system, sans-serif">MCP</text>
+      <text x="789" y="553" fill="#9db1c9">stdio · HTTP servers</text>
+      <text x="789" y="574" fill="#9db1c9">mcp__server__tool</text>
+    </g>
+  </g>
+</svg>

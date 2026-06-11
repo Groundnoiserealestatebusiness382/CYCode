@@ -1,0 +1,32 @@
+name: Feature request
+description: Propose a tool, skill, or harness improvement
+labels: [enhancement]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: What research/coding workflow is painful today?
+      description: Describe the job to be done, not just the feature.
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed solution
+      description: >
+        Sketch it. Note: procedures the model should follow are usually a skill
+        (markdown); new capabilities are a tool; harness changes need the strongest case.
+    validations:
+      required: true
+  - type: dropdown
+    id: kind
+    attributes:
+      label: Kind
+      options:
+        - skill (markdown prompt)
+        - tool (new capability)
+        - harness/core
+        - GUI/TUI
+        - docs
+    validations:
+      required: true
