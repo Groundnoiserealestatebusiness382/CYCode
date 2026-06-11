@@ -1,7 +1,7 @@
 <svg width="900" height="430" viewBox="0 0 900 430" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="CYCode architecture: three frontends, one agent core, one permission gate, three tool families">
   <defs>
-    <marker id="arr" markerWidth="9" markerHeight="9" refX="7" refY="3.5" orient="auto">
-      <path d="M0,0 L7,3.5 L0,7" stroke="#39455c" stroke-width="1.5" fill="none"/>
+    <marker id="arr" markerWidth="9" markerHeight="9" refX="6.5" refY="3.5" orient="auto">
+      <path d="M0,0 L6.5,3.5 L0,7" stroke="#3a4a68" stroke-width="1.5" fill="none" stroke-linecap="round"/>
     </marker>
   </defs>
 
@@ -10,49 +10,50 @@
 
   <g font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif" text-anchor="middle">
     <!-- frontends -->
-    <g font-size="16.5">
-      <rect x="90" y="46" width="200" height="52" rx="10" fill="#121a29" stroke="#2a3f63" stroke-width="1.4"/>
-      <text x="190" y="78" fill="#e6edf3" font-family="ui-monospace, Menlo, Consolas, monospace">cycode</text>
-      <rect x="350" y="46" width="200" height="52" rx="10" fill="#121a29" stroke="#2a3f63" stroke-width="1.4"/>
-      <text x="450" y="78" fill="#e6edf3" font-family="ui-monospace, Menlo, Consolas, monospace">cycode ui</text>
-      <rect x="610" y="46" width="200" height="52" rx="10" fill="#121a29" stroke="#2a3f63" stroke-width="1.4"/>
-      <text x="710" y="78" fill="#e6edf3" font-family="ui-monospace, Menlo, Consolas, monospace">cycode exec</text>
+    <g font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace" font-size="16">
+      <rect x="90" y="46" width="200" height="52" rx="11" fill="#121a29" stroke="#2a3f63" stroke-width="1.4"/>
+      <text x="190" y="78" fill="#e6edf3">cycode</text>
+      <rect x="350" y="46" width="200" height="52" rx="11" fill="#121a29" stroke="#2a3f63" stroke-width="1.4"/>
+      <text x="450" y="78" fill="#e6edf3">cycode ui</text>
+      <rect x="610" y="46" width="200" height="52" rx="11" fill="#121a29" stroke="#2a3f63" stroke-width="1.4"/>
+      <text x="710" y="78" fill="#e6edf3">cycode exec</text>
     </g>
-    <g font-size="13" fill="#5b6c8c">
-      <text x="190" y="120">terminal</text>
-      <text x="450" y="120">local web GUI</text>
-      <text x="710" y="120">scripts · CI · loops</text>
+    <g font-size="12.5" fill="#5b6c8c">
+      <text x="190" y="119">terminal</text>
+      <text x="450" y="119">local web GUI</text>
+      <text x="710" y="119">scripts · CI · loops</text>
     </g>
 
-    <path d="M190 128 V150 H430 V162" stroke="#39455c" stroke-width="1.5" fill="none" marker-end="url(#arr)"/>
-    <path d="M450 128 V162" stroke="#39455c" stroke-width="1.5" fill="none" marker-end="url(#arr)"/>
-    <path d="M710 128 V150 H470 V162" stroke="#39455c" stroke-width="1.5" fill="none" marker-end="url(#arr)"/>
+    <!-- connectors with rounded elbows -->
+    <path d="M190 128 V146 Q190 154 198 154 H424 Q432 154 432 160 V162" stroke="#3a4a68" stroke-width="1.5" fill="none" marker-end="url(#arr)"/>
+    <path d="M450 128 V162" stroke="#3a4a68" stroke-width="1.5" fill="none" marker-end="url(#arr)"/>
+    <path d="M710 128 V146 Q710 154 702 154 H476 Q468 154 468 160 V162" stroke="#3a4a68" stroke-width="1.5" fill="none" marker-end="url(#arr)"/>
 
     <!-- core -->
-    <rect x="200" y="166" width="500" height="88" rx="12" fill="#101b2e" stroke="#58a6ff" stroke-width="1.8"/>
-    <text x="450" y="203" font-size="19" font-weight="700" fill="#58a6ff">Agent core</text>
-    <text x="450" y="232" font-size="14" fill="#8b949e">turn loop · permission gate · sessions · compaction · any model</text>
+    <rect x="200" y="166" width="500" height="88" rx="13" fill="#101b2e" stroke="#58a6ff" stroke-width="1.7"/>
+    <text x="450" y="203" font-size="18.5" font-weight="700" fill="#58a6ff">Agent core</text>
+    <text x="450" y="231" font-size="13.5" fill="#8b949e">turn loop · permission gate · sessions · compaction · any model</text>
 
-    <path d="M270 254 V286" stroke="#39455c" stroke-width="1.5" fill="none" marker-end="url(#arr)"/>
-    <path d="M450 254 V286" stroke="#39455c" stroke-width="1.5" fill="none" marker-end="url(#arr)"/>
-    <path d="M630 254 V286" stroke="#39455c" stroke-width="1.5" fill="none" marker-end="url(#arr)"/>
+    <path d="M270 254 V284" stroke="#3a4a68" stroke-width="1.5" fill="none" marker-end="url(#arr)"/>
+    <path d="M450 254 V284" stroke="#3a4a68" stroke-width="1.5" fill="none" marker-end="url(#arr)"/>
+    <path d="M630 254 V284" stroke="#3a4a68" stroke-width="1.5" fill="none" marker-end="url(#arr)"/>
 
     <!-- tool families -->
-    <g font-size="16.5" font-weight="700">
-      <rect x="120" y="290" width="300" height="92" rx="10" fill="#0f1f16" stroke="#23513a" stroke-width="1.4"/>
-      <text x="270" y="324" fill="#3fb950">Code</text>
-      <rect x="440" y="290" width="300" height="92" rx="10" fill="#101b2e" stroke="#2a3f63" stroke-width="1.4"/>
-      <text x="590" y="324" fill="#58a6ff">Research</text>
-      <rect x="760" y="290" width="92" height="92" rx="10" fill="#1a1422" stroke="#4a2a52" stroke-width="1.4"/>
-      <text x="806" y="324" fill="#d2a8ff">MCP</text>
+    <g font-size="15.5" font-weight="700">
+      <rect x="120" y="288" width="300" height="94" rx="11" fill="#0f1f16" stroke="#23513a" stroke-width="1.4"/>
+      <text x="270" y="322" fill="#3fb950">Code</text>
+      <rect x="440" y="288" width="300" height="94" rx="11" fill="#101b2e" stroke="#2a3f63" stroke-width="1.4"/>
+      <text x="590" y="322" fill="#58a6ff">Research</text>
+      <rect x="760" y="288" width="94" height="94" rx="11" fill="#1a1422" stroke="#4a2a52" stroke-width="1.4"/>
+      <text x="807" y="322" fill="#d2a8ff">MCP</text>
     </g>
-    <g font-size="13.5" fill="#8b949e" font-family="ui-monospace, Menlo, Consolas, monospace">
-      <text x="270" y="350">read · edit · grep · bash</text>
-      <text x="270" y="370">glob · web_fetch · todo</text>
-      <text x="590" y="350">arxiv · papers · notebooks</text>
-      <text x="590" y="370">experiments · latex</text>
-      <text x="806" y="354">any</text>
-      <text x="806" y="372">server</text>
+    <g font-size="13" fill="#8b949e" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">
+      <text x="270" y="349">read · edit · grep · bash</text>
+      <text x="270" y="369">glob · web_fetch · todo</text>
+      <text x="590" y="349">arxiv · papers · notebooks</text>
+      <text x="590" y="369">experiments · latex</text>
+      <text x="807" y="352">any</text>
+      <text x="807" y="370">server</text>
     </g>
   </g>
 </svg>

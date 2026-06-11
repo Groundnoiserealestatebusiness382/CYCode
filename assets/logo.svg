@@ -1,0 +1,13 @@
+<svg width="240" height="240" viewBox="-120 -120 240 240" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="CYCode logo: a hexagonal C with a terminal cursor">
+  <defs>
+    <linearGradient id="brand" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#58a6ff"/>
+      <stop offset="1" stop-color="#3fb950"/>
+    </linearGradient>
+  </defs>
+  <!-- hexagon opened on the right: the C of CYCode, the ring of research -->
+  <path d="M69.3 -40 L0 -80 L-69.3 -40 L-69.3 40 L0 80 L69.3 40"
+        stroke="url(#brand)" stroke-width="21" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- terminal cursor at the optical center -->
+  <rect x="-17" y="-26" width="30" height="52" rx="7" fill="url(#brand)"/>
+</svg>

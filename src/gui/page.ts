@@ -5,6 +5,7 @@ export const PAGE_HTML = `<!doctype html>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>CYCode</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><rect width='512' height='512' rx='116' fill='%230d1117'/><g transform='translate(256 256) scale(1.62)' fill='none'><path d='M69.3 -40 L0 -80 L-69.3 -40 L-69.3 40 L0 80 L69.3 40' stroke='%2358a6ff' stroke-width='21' stroke-linecap='round' stroke-linejoin='round'/><rect x='-17' y='-26' width='30' height='52' rx='7' fill='%2358a6ff'/></g></svg>">
 <style>
   :root {
     --bg: #0d1117; --panel: #131a26; --raised: #1a2333; --border: #232e44;
@@ -26,7 +27,7 @@ export const PAGE_HTML = `<!doctype html>
     display: flex; align-items: center; gap: 12px; padding: 11px 18px;
     border-bottom: 1px solid var(--border); background: var(--panel); flex-shrink: 0;
   }
-  .logo { font-weight: 800; font-size: 16px; letter-spacing: -0.3px; }
+  .logo { font-weight: 800; font-size: 16px; letter-spacing: -0.3px; display: flex; align-items: center; gap: 8px; }
   .logo b { color: var(--accent); font-weight: 800; }
   .meta { color: var(--faint); font-size: 12.5px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   #busy { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); opacity: 0; transition: opacity .2s; }
@@ -124,7 +125,7 @@ export const PAGE_HTML = `<!doctype html>
 </head>
 <body>
 <header>
-  <span class="logo">⌬ CY<b>Code</b></span>
+  <span class="logo"><svg width="19" height="19" viewBox="-112 -112 224 224" fill="none"><defs><linearGradient id="bm" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#58a6ff"/><stop offset="1" stop-color="#3fb950"/></linearGradient></defs><path d="M69.3 -40 L0 -80 L-69.3 -40 L-69.3 40 L0 80 L69.3 40" stroke="url(#bm)" stroke-width="22" stroke-linecap="round" stroke-linejoin="round"/><rect x="-17" y="-26" width="30" height="52" rx="7" fill="url(#bm)"/></svg><span>CY<b>Code</b></span></span>
   <span class="meta" id="meta"></span>
   <span id="busy"></span>
   <select id="mode" title="Permission mode"></select>

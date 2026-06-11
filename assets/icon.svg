@@ -1,0 +1,19 @@
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="CYCode app icon">
+  <defs>
+    <linearGradient id="brand" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#58a6ff"/>
+      <stop offset="1" stop-color="#3fb950"/>
+    </linearGradient>
+    <radialGradient id="sheen" cx="0.3" cy="0.22" r="0.9">
+      <stop offset="0" stop-color="#1b2740"/>
+      <stop offset="1" stop-color="#0d1117"/>
+    </radialGradient>
+  </defs>
+  <rect width="512" height="512" rx="116" fill="url(#sheen)"/>
+  <rect x="3" y="3" width="506" height="506" rx="113" stroke="#27324a" stroke-width="3"/>
+  <g transform="translate(256 256) scale(1.62)">
+    <path d="M69.3 -40 L0 -80 L-69.3 -40 L-69.3 40 L0 80 L69.3 40"
+          stroke="url(#brand)" stroke-width="21" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+    <rect x="-17" y="-26" width="30" height="52" rx="7" fill="url(#brand)"/>
+  </g>
+</svg>

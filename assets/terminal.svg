@@ -1,29 +1,47 @@
 <svg width="900" height="430" viewBox="0 0 900 430" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="CYCode terminal session">
+  <defs>
+    <linearGradient id="brand" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#58a6ff"/>
+      <stop offset="1" stop-color="#3fb950"/>
+    </linearGradient>
+    <filter id="shadow" x="-6%" y="-6%" width="112%" height="116%">
+      <feDropShadow dx="0" dy="10" stdDeviation="14" flood-color="#000000" flood-opacity="0.35"/>
+    </filter>
+  </defs>
+
   <!-- window -->
-  <rect x="10" y="10" width="880" height="410" rx="14" fill="#0d1117"/>
-  <rect x="10.75" y="10.75" width="878.5" height="408.5" rx="13.25" stroke="#21293a" stroke-width="1.5"/>
-  <circle cx="40" cy="36" r="6" fill="#2c3850"/>
-  <circle cx="62" cy="36" r="6" fill="#2c3850"/>
-  <circle cx="84" cy="36" r="6" fill="#2c3850"/>
-  <text x="450" y="42" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace" font-size="14" fill="#5b6c8c" text-anchor="middle">cycode — my-research-project</text>
-  <line x1="10" y1="62" x2="890" y2="62" stroke="#21293a" stroke-width="1"/>
+  <g filter="url(#shadow)">
+    <rect x="14" y="10" width="872" height="404" rx="14" fill="#0d1117"/>
+    <rect x="14.75" y="10.75" width="870.5" height="402.5" rx="13.25" stroke="#232e44" stroke-width="1.5"/>
+  </g>
+  <circle cx="44" cy="37" r="6" fill="#2c3850"/>
+  <circle cx="66" cy="37" r="6" fill="#2c3850"/>
+  <circle cx="88" cy="37" r="6" fill="#2c3850"/>
+  <g transform="translate(414 37) scale(0.115)">
+    <path d="M69.3 -40 L0 -80 L-69.3 -40 L-69.3 40 L0 80 L69.3 40"
+          stroke="url(#brand)" stroke-width="24" stroke-linecap="round" stroke-linejoin="round"/>
+    <rect x="-17" y="-26" width="30" height="52" rx="7" fill="url(#brand)"/>
+  </g>
+  <text x="432" y="42" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace" font-size="13.5" fill="#5b6c8c">cycode — my-research-project</text>
+  <line x1="14" y1="62" x2="886" y2="62" stroke="#232e44" stroke-width="1"/>
 
   <!-- session -->
-  <g font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace" font-size="17">
-    <text x="48" y="110" fill="#58a6ff">›  <tspan fill="#e6edf3">/lit-review test-time compute scaling</tspan></text>
+  <g font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace" font-size="16.5">
+    <text x="52" y="108" fill="#58a6ff">›  <tspan fill="#e6edf3">/lit-review test-time compute scaling</tspan></text>
 
-    <text x="48" y="160" fill="#3fb950">⏺  <tspan fill="#c9d4e3">arxiv_search("test-time compute")</tspan></text>
-    <text x="852" y="160" fill="#5b6c8c" text-anchor="end">10 papers</text>
+    <text x="52" y="158" fill="#3fb950">⏺  <tspan fill="#c9d4e3">arxiv_search(</tspan><tspan fill="#a5d6ff">"test-time compute"</tspan><tspan fill="#c9d4e3">)</tspan></text>
+    <text x="848" y="158" fill="#5b6c8c" text-anchor="end">10 papers</text>
 
-    <text x="48" y="202" fill="#3fb950">⏺  <tspan fill="#c9d4e3">paper_read(2408.03314)</tspan></text>
-    <text x="852" y="202" fill="#5b6c8c" text-anchor="end">58 pages</text>
+    <text x="52" y="200" fill="#3fb950">⏺  <tspan fill="#c9d4e3">paper_read(</tspan><tspan fill="#a5d6ff">2408.03314</tspan><tspan fill="#c9d4e3">)</tspan></text>
+    <text x="848" y="200" fill="#5b6c8c" text-anchor="end">58 pages</text>
 
-    <text x="48" y="244" fill="#d29922">⏺  <tspan fill="#c9d4e3">write(lit-review.md)</tspan></text>
-    <text x="852" y="244" fill="#5b6c8c" text-anchor="end">allowed · 9.4 KB</text>
+    <text x="52" y="242" fill="#d29922">⏺  <tspan fill="#c9d4e3">write(</tspan><tspan fill="#a5d6ff">lit-review.md</tspan><tspan fill="#c9d4e3">)</tspan></text>
+    <text x="848" y="242" fill="#5b6c8c" text-anchor="end">allowed · 9.4 KB</text>
 
-    <text x="48" y="304" fill="#e6edf3">Reviewed 12 papers across three lines of work.</text>
-    <text x="48" y="336" fill="#e6edf3">Notes + BibTeX → <tspan fill="#58a6ff">lit-review.md</tspan></text>
+    <text x="52" y="300" fill="#e6edf3">Reviewed 12 papers across three lines of work.</text>
+    <text x="52" y="330" fill="#e6edf3">Notes + BibTeX → <tspan fill="#58a6ff">lit-review.md</tspan></text>
 
-    <text x="48" y="392" fill="#58a6ff">›  <tspan fill="#39455c">_</tspan></text>
+    <text x="52" y="384" fill="#58a6ff">›</text>
+    <rect x="78" y="370" width="10" height="19" rx="2" fill="#3a4a68"/>
   </g>
 </svg>

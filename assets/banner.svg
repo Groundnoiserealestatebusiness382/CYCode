@@ -1,32 +1,32 @@
 <svg width="1200" height="260" viewBox="0 0 1200 260" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="CYCode — the open-source coding agent built for AI research">
   <defs>
-    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="1">
+    <linearGradient id="brand" x1="0" y1="0" x2="1" y2="1">
       <stop offset="0" stop-color="#58a6ff"/>
       <stop offset="1" stop-color="#3fb950"/>
     </linearGradient>
-    <radialGradient id="glow" cx="0.32" cy="0.5" r="0.55">
-      <stop offset="0" stop-color="#58a6ff" stop-opacity="0.10"/>
+    <radialGradient id="glow" cx="0.3" cy="0.45" r="0.6">
+      <stop offset="0" stop-color="#58a6ff" stop-opacity="0.09"/>
       <stop offset="1" stop-color="#58a6ff" stop-opacity="0"/>
     </radialGradient>
   </defs>
 
   <rect width="1200" height="260" rx="16" fill="#0d1117"/>
-  <rect x="0.75" y="0.75" width="1198.5" height="258.5" rx="15.25" stroke="#21293a" stroke-width="1.5"/>
   <rect width="1200" height="260" rx="16" fill="url(#glow)"/>
+  <rect x="0.75" y="0.75" width="1198.5" height="258.5" rx="15.25" stroke="#21293a" stroke-width="1.5"/>
 
-  <!-- mark: hexagon, one orbit, nucleus -->
-  <g transform="translate(400 116)">
-    <path d="M0,-52 45,-26 45,26 0,52 -45,26 -45,-26Z" stroke="url(#accent)" stroke-width="5" fill="none" stroke-linejoin="round"/>
-    <ellipse rx="30" ry="12" transform="rotate(-28)" stroke="#8b949e" stroke-width="2.5" opacity="0.85"/>
-    <circle r="7" fill="url(#accent)"/>
+  <!-- mark: hexagonal C + cursor -->
+  <g transform="translate(357 114) scale(0.62)">
+    <path d="M69.3 -40 L0 -80 L-69.3 -40 L-69.3 40 L0 80 L69.3 40"
+          stroke="url(#brand)" stroke-width="21" stroke-linecap="round" stroke-linejoin="round"/>
+    <rect x="-17" y="-26" width="30" height="52" rx="7" fill="url(#brand)"/>
   </g>
 
-  <!-- wordmark + tagline -->
+  <!-- lockup -->
   <g font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">
-    <text x="478" y="106" font-size="64" font-weight="800" fill="#e6edf3" letter-spacing="-1.5">CY<tspan fill="#58a6ff">Code</tspan></text>
-    <text x="482" y="146" font-size="21" fill="#8b949e">The open-source coding agent built for AI research</text>
+    <text x="436" y="138" font-size="64" font-weight="800" fill="#e6edf3" letter-spacing="-1.5">CY<tspan fill="#58a6ff">Code</tspan></text>
+    <text x="439" y="176" font-size="19" fill="#8b949e">The open-source coding agent built for AI research</text>
   </g>
 
-  <!-- single muted feature line -->
-  <text x="600" y="216" font-size="17" fill="#5b6c8c" text-anchor="middle" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace" letter-spacing="0.5">papers · experiments · notebooks · LaTeX · code · loops</text>
+  <text x="600" y="224" font-size="15.5" fill="#5b6c8c" text-anchor="middle"
+        font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace" letter-spacing="0.4">papers · experiments · notebooks · LaTeX · code · loops</text>
 </svg>
