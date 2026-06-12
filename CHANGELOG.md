@@ -6,6 +6,13 @@ All notable changes to CYCode are documented here. The format follows
 
 ## [Unreleased]
 
+## [0.4.0] - 2026-06-12
+
+### Added
+- **wandb integration**: `exp_status` now lists local `wandb/run-*` directories
+  with their numeric summary metrics (from `wandb-summary.json`) — offline,
+  no API key required. `/watch-run` picks them up automatically.
+
 ## [0.3.0] - 2026-06-12
 
 ### Added
@@ -72,7 +79,8 @@ Initial release.
 - Post-edit diagnostics command with model feedback.
 - 51 vitest tests including mock-model agent-loop integration.
 
-[Unreleased]: https://github.com/ChaoYue0307/CYCode/compare/v0.3.0...HEAD
+[Unreleased]: https://github.com/ChaoYue0307/CYCode/compare/v0.4.0...HEAD
+[0.4.0]: https://github.com/ChaoYue0307/CYCode/compare/v0.3.0...v0.4.0
 [0.3.0]: https://github.com/ChaoYue0307/CYCode/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/ChaoYue0307/CYCode/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/ChaoYue0307/CYCode/releases/tag/v0.1.0

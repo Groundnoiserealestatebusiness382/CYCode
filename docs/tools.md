@@ -33,7 +33,7 @@ result so the model can self-correct immediately.
 | `notebook_read` | ✅ | All `.ipynb` cells with indices, sources, and truncated outputs | `path`, `include_outputs?` |
 | `notebook_edit` | ❌ | Replace/insert/delete/append a cell by index; edited code cells get outputs cleared | `path`, `mode`, `index?`, `source?`, `cell_type?` |
 | `exp_run` | ❌ | Launch a command detached in the background; log → `.cycode/runs/<id>.log` | `command`, `name?` |
-| `exp_status` | ✅ | List runs, or tail one run's log with optional `metric_regex` extraction | `id?`, `tail_lines?`, `metric_regex?` |
+| `exp_status` | ✅ | List runs (incl. local wandb runs with their summary metrics), or tail one run's log with optional `metric_regex` extraction | `id?`, `tail_lines?`, `metric_regex?` |
 | `exp_stop` | ❌ | SIGTERM a run's process group | `id` |
 | `latex_build` | ❌ | Build to PDF via latexmk (engine fallback); structured `file:line` errors | `main?`, `dir?`, `engine?` |
 

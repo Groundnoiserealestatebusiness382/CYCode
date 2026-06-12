@@ -1,6 +1,6 @@
 {
   "name": "cycode",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "CYCode — an open-source terminal coding agent for AI research: papers, experiments, notebooks, LaTeX, and code.",
   "type": "module",
   "license": "MIT",

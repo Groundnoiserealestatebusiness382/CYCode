@@ -3,8 +3,10 @@ import { describe, expect, it } from "vitest";
 import {
   expRunTool,
   expStatusTool,
+  formatWandbRuns,
   isAlive,
   parseMetrics,
+  readWandbRuns,
   tailLines,
 } from "../src/tools/research/experiments.js";
 import { makeCtx, makeTmpDir } from "./helpers.js";
@@ -56,5 +58,49 @@ describe("exp_run + exp_status", () => {
     await expRunTool.execute({ command: "true", name: "r1" }, ctx);
     const listing = await expStatusTool.execute({}, ctx);
     expect(listing).toContain("r1");
+  });
+});
+
+describe("wandb local runs", () => {
+  function writeWandbFixture(dir: string, runId: string, summary: object): void {
+    const files = `${dir}/wandb/run-${runId}/files`;
+    fs.mkdirSync(files, { recursive: true });
+    fs.writeFileSync(`${files}/wandb-summary.json`, JSON.stringify(summary));
+    fs.writeFileSync(
+      `${files}/wandb-metadata.json`,
+      JSON.stringify({ startedAt: "2026-06-12T01:00:00" }),
+    );
+  }
+
+  it("reads numeric summary metrics, skipping private keys", () => {
+    const dir = makeTmpDir();
+    writeWandbFixture(dir, "20260612_010000-abc123", {
+      loss: 0.0421,
+      "eval/accuracy": 0.913,
+      _step: 5000,
+      note: "not a number",
+    });
+    const runs = readWandbRuns(dir);
+    expect(runs).toHaveLength(1);
+    expect(runs[0]!.id).toBe("20260612_010000-abc123");
+    expect(runs[0]!.metrics).toEqual({ loss: 0.0421, "eval/accuracy": 0.913 });
+    expect(runs[0]!.startedAt).toBe("2026-06-12T01:00:00");
+  });
+
+  it("returns empty without a wandb dir and formats runs readably", () => {
+    expect(readWandbRuns(makeTmpDir())).toEqual([]);
+    const text = formatWandbRuns([
+      { id: "x", startedAt: "2026-06-12", metrics: { loss: 0.5 } },
+    ]);
+    expect(text).toContain("wandb x");
+    expect(text).toContain("loss=0.5000");
+  });
+
+  it("appears in exp_status listings", async () => {
+    const dir = makeTmpDir();
+    writeWandbFixture(dir, "20260612_020000-def456", { loss: 1.25 });
+    const out = await expStatusTool.execute({}, makeCtx(dir));
+    expect(out).toContain("local wandb runs");
+    expect(out).toContain("loss=1.250");
   });
 });

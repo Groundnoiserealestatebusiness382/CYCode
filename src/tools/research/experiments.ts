@@ -57,6 +57,66 @@ export function parseMetrics(log: string, pattern: string, keep = 10): string[] 
   return matches.slice(-keep);
 }
 
+export interface WandbRun {
+  id: string;
+  startedAt?: string;
+  metrics: Record<string, number>;
+}
+
+/** Read local wandb run dirs (wandb/run-&lt;id&gt;/files) — no API key, works offline. */
+export function readWandbRuns(cwd: string, limit = 5): WandbRun[] {
+  const wandbDir = path.join(cwd, "wandb");
+  let entries: string[];
+  try {
+    entries = fs
+      .readdirSync(wandbDir)
+      .filter((d) => d.startsWith("run-"))
+      .sort();
+  } catch {
+    return [];
+  }
+  const runs: WandbRun[] = [];
+  for (const dir of entries.slice(-limit)) {
+    const files = path.join(wandbDir, dir, "files");
+    const run: WandbRun = { id: dir.replace(/^run-/, ""), metrics: {} };
+    try {
+      const summary = JSON.parse(
+        fs.readFileSync(path.join(files, "wandb-summary.json"), "utf8"),
+      ) as Record<string, unknown>;
+      for (const [key, value] of Object.entries(summary)) {
+        if (key.startsWith("_")) continue;
+        if (typeof value === "number" && Number.isFinite(value)) {
+          run.metrics[key] = value;
+        }
+      }
+    } catch {
+      continue; // not a readable run
+    }
+    try {
+      const meta = JSON.parse(
+        fs.readFileSync(path.join(files, "wandb-metadata.json"), "utf8"),
+      ) as { startedAt?: string };
+      run.startedAt = meta.startedAt;
+    } catch {
+      // metadata is optional
+    }
+    runs.push(run);
+  }
+  return runs;
+}
+
+export function formatWandbRuns(runs: WandbRun[]): string {
+  return runs
+    .map((r) => {
+      const metrics = Object.entries(r.metrics)
+        .slice(0, 12)
+        .map(([k, v]) => `${k}=${Math.abs(v) >= 1000 ? v.toFixed(0) : v.toPrecision(4)}`)
+        .join("  ");
+      return `wandb ${r.id}${r.startedAt ? `  (started ${r.startedAt})` : ""}\n  ${metrics || "(no numeric summary metrics)"}`;
+    })
+    .join("\n");
+}
+
 export const expRunTool: CycodeTool<{ command: string; name?: string }> = {
   name: "exp_run",
   description:
@@ -119,13 +179,22 @@ export const expStatusTool: CycodeTool<{
   async execute(input, ctx) {
     const runs = loadRuns(ctx.cwd);
     if (!input.id) {
-      if (runs.length === 0) return "No runs recorded";
-      return runs
-        .map(
-          (r) =>
-            `${r.id}  ${isAlive(r.pid) ? "RUNNING" : "FINISHED"}  ${r.name}  (started ${r.startedAt})`,
-        )
-        .join("\n");
+      const sections: string[] = [];
+      if (runs.length > 0) {
+        sections.push(
+          runs
+            .map(
+              (r) =>
+                `${r.id}  ${isAlive(r.pid) ? "RUNNING" : "FINISHED"}  ${r.name}  (started ${r.startedAt})`,
+            )
+            .join("\n"),
+        );
+      }
+      const wandbRuns = readWandbRuns(ctx.cwd);
+      if (wandbRuns.length > 0) {
+        sections.push(`--- local wandb runs ---\n${formatWandbRuns(wandbRuns)}`);
+      }
+      return sections.length > 0 ? sections.join("\n\n") : "No runs recorded";
     }
     const run = runs.find((r) => r.id === input.id);
     if (!run) throw new Error(`Run not found: ${input.id}`);

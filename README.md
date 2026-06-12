@@ -29,7 +29,7 @@ General coding agents stop at code. Research is code **plus** literature, experi
 </p>
 
 - 📚 **Papers** — `arxiv_search`, `paper_read` (PDF → text, page ranges), `semantic_scholar` (search + references). `/lit-review` produces structured notes with BibTeX — every citation comes from a real tool result, never from model memory.
-- 🧪 **Experiments** — `exp_run` launches training scripts detached in the background; `exp_status` tails logs and extracts metrics by regex; `/watch-run` reports trends and flags divergence (NaN losses, OOM, frozen output).
+- 🧪 **Experiments** — `exp_run` launches training scripts detached in the background; `exp_status` tails logs, extracts metrics by regex, and reads local **wandb** runs' summary metrics (offline, no API key); `/watch-run` reports trends and flags divergence (NaN losses, OOM, frozen output).
 - 📓 **Notebooks** — `notebook_read` / `notebook_edit` operate on `.ipynb` cells directly, preserving nbformat.
 - 📄 **LaTeX** — `latex_build` compiles via latexmk/pdflatex and returns structured `file:line` errors. `/paper-draft` writes grounded in your actual results.
 - 💻 **Code** — the full coding toolkit: `read`, `write`, `edit`, `glob`, `grep`, `bash`, `web_fetch` (plus optional `web_search`), with permission gating on everything and post-edit diagnostics fed back to the model.
@@ -182,9 +182,10 @@ CYCode doesn't try to beat the big harnesses at general software engineering —
 - [x] Parallel execution of read-only tool batches (incl. `explore` fan-out)
 - [x] Runtime model switching (`/model`) and session token tracking
 - [x] OS-level bash sandboxing (macOS Seatbelt / Linux bubblewrap, `--sandbox`)
+- [x] wandb local-run metrics in `exp_status` (offline, no API key)
 - [ ] npm package release (`npm i -g cycode`)
 - [ ] Native desktop app (Tauri) wrapping the GUI
-- [ ] wandb / tensorboard native integration for `exp_status`
+- [ ] TensorBoard event-file metrics in `exp_status`
 - [ ] LSP-based diagnostics (currently command-based)
 
 Have an idea? [Open an issue](https://github.com/ChaoYue0307/CYCode/issues/new/choose).
